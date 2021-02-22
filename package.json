@@ -1,0 +1,77 @@
+{
+  "name": "tv-shows",
+  "version": "1.0.0",
+  "description": "React, React-Redux, TS, Jest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "webpack serve --config webpack/webpack.config.js --env env=dev",
+    "build": "webpack --config webpack/webpack.config.js --env env=prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EvaMalinina/tv-shows.git"
+  },
+  "keywords": [
+    "React",
+    "React-Redux",
+    "TS",
+    "Jest"
+  ],
+  "author": "Tatyana Dotsenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EvaMalinina/tv-shows/issues"
+  },
+  "homepage": "https://github.com/EvaMalinina/tv-shows#readme",
+  "dependencies": {
+    "@babel/preset-typescript": "^7.12.17",
+    "@types/node": "^14.14.31",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-redux": "^7.2.2",
+    "react-router": "^5.2.0",
+    "redux": "^4.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.17",
+    "@babel/preset-env": "^7.12.17",
+    "@babel/preset-react": "^7.12.13",
+    "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "1.0.2",
+    "@types/jest": "^26.0.20",
+    "@types/node": "^9.4.6",
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.1",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^5.0.2",
+    "css-minimizer-webpack-plugin": "^1.2.0",
+    "dotenv-webpack": "^6.0.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.1",
+    "html-loader": "^2.0.0",
+    "html-webpack-plugin": "^5.1.0",
+    "jest": "^26.6.3",
+    "mini-css-extract-plugin": "^1.3.8",
+    "node-sass": "^5.0.0",
+    "react-test-renderer": "^17.0.1",
+    "sass-loader": "^11.0.1",
+    "style-loader": "^2.0.0",
+    "ts-jest": "^26.5.1",
+    "ts-loader": "^8.0.17",
+    "tslint": "^6.1.3",
+    "tslint-immutable": "^6.0.1",
+    "typescript": "^4.1.5",
+    "webpack": "^5.23.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "src/__mocks__/styleMock.js"
+    }
+  }
+}
