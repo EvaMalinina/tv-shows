@@ -1,4 +1,4 @@
-# tv-shows
+# netflix
 //Create package.json file and install React, Redux, React-Redux, React-Router, Jest. 
 //Install and configure Webpack & Babel to get build artifact by running npm command.
 

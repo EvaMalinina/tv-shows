@@ -1,7 +1,7 @@
-import React from 'react';
-import Hero from "./components/hero/hero";
+import * as React from 'react';
+import Hero from "./components/hero/Hero";
 
-const App = () => {
+export const App: React.FC = () => {
   return (
     <div>
       <Hero/>
@@ -9,4 +9,4 @@ const App = () => {
   )
 }
 
-export default App;
+

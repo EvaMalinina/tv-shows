@@ -6,33 +6,41 @@ module.exports = {
   entry: {
     index: path.resolve(__dirname, "../src", "index.js")
   },
-  output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'bundle.js'
-  },
   module: {
     rules: [
       {
-        test: /\.html/,
-        use: ['html-loader']
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', { targets: "defaults" }]
+            ]
+          }
+        }
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.tsx?$/,
+        use: 'ts-loader',
         exclude: /node_modules/,
-        use: ["babel-loader"]
-      },
-      {
-        test: /\.(ts|tsx)?$/,
-        exclude: /node_modules/,
-        use: ["ts-loader"]
       },
     ]
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', ".json"]
+    extensions: ['.js', '.ts', '.tsx']
   },
   plugins: [
-    // new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin(),
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      appMountId: 'root',
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+    })
   ],
 }
+

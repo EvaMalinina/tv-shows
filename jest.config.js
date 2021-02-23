@@ -6,7 +6,7 @@ module.exports = {
     "^.+\\.tsx?$": "ts-jest",
     '^.+\\.(js|jsx)?$': 'babel-jest'
   },
-  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  "testMatch": ["**/?(*.)+(test).(js|ts|tsx)"],
   "moduleFileExtensions": [
     "ts",
     "tsx",
@@ -15,6 +15,8 @@ module.exports = {
     "json",
     "node"
   ],
-  "snapshotSerializers": ["enzyme-to-json/serializer"],
-  "setupFilesAfterEnv": ["./setupTests.js"]
+  "moduleNameMapper": {
+    "\\.(scss)$": "identity-obj-proxy"
+  },
+  "setupFilesAfterEnv": ["./setupTests.ts"],
 }

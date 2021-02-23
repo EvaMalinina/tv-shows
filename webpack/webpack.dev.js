@@ -5,6 +5,10 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = merge(common, {
   mode: 'development',
+  output: {
+    path: path.resolve(__dirname, '../build'),
+    filename: 'bundle.js'
+  },
   devtool: 'inline-source-map',
   module: {
     rules: [
@@ -28,7 +32,7 @@ module.exports = merge(common, {
     })
   ],
   devServer: {
-    contentBase: '../dist',
-    port: 9123
+    contentBase: '../build',
+    port: 8082
   },
 })
