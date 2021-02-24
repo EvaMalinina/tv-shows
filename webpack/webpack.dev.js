@@ -5,11 +5,6 @@ const Dotenv = require('dotenv-webpack');
 
 module.exports = merge(common, {
   mode: 'development',
-  output: {
-    path: path.resolve(__dirname, '../build'),
-    // filename: 'bundle.js'
-    filename: 'bundle.[contenthash].js',
-  },
   devtool: 'inline-source-map',
   module: {
     rules: [
