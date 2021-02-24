@@ -9,7 +9,8 @@
     "dev": "webpack serve --open --config webpack/webpack.config.js --env env=dev",
     "build": "webpack --config webpack/webpack.config.js --env env=prod",
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "ts:check": "tsc --noEmit --project ./tsconfig.json"
   },
   "repository": {
     "type": "git",
