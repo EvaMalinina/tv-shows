@@ -11,7 +11,13 @@
     "allowJs": true,
     "jsx": "react",
     "esModuleInterop": true,
-    "types": ["node", "jest", "@testing-library/jest-dom"]
+    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "plugins": [
+      {
+        "transform": "typescript-plugin-styled-components",
+        "type": "config"
+      }
+    ]
   },
   "include": [
     "./src/**/*"

@@ -1,11 +1,18 @@
 import * as React from 'react';
-import Hero from "./components/hero/Hero";
+import Hero from './components/hero/Hero';
+import { ThemeProvider } from 'styled-components';
+import { theme } from "./styles/theme";
+import { GlobalStyles } from "./styles/globalStyles";
+
 
 export const App = () => {
   return (
-    <div>
-      <Hero/>
-    </div>
+    <>
+      <GlobalStyles/>
+      <ThemeProvider theme={theme}>
+        <Hero/>
+      </ThemeProvider>
+    </>
   )
 }
 

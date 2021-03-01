@@ -16,7 +16,7 @@ module.exports = {
     "node"
   ],
   "moduleNameMapper": {
-    "\\.(scss)$": "identity-obj-proxy"
+    "\\.(scss)$": "identity-obj-proxy",
   },
   "setupFilesAfterEnv": ["./setupTests.ts"],
 }
