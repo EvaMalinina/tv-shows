@@ -1,13 +1,16 @@
-import * as React from "react";
+import React from "react";
 import { useEffect, useRef } from "react";
 import {
-  HeaderC,
   Container,
+  ContainerRow,
   ContainerColumn,
+  ContainerSpaceBetween
+} from "../../styles/general";
+import {
+  HeaderC,
   InputSearchMovie,
   BtnAddMovie,
-  BtnSearchMovie,
-  ContainerSpaceBetween
+  BtnSearchMovie
 } from "./header.styled";
 import Title from "../ui/Title/Title";
 import Logo from "../ui/Logo/Logo";
@@ -28,26 +31,28 @@ const Header = () => {
 
   return (
     <HeaderC>
-      <ContainerColumn>
-        <ContainerSpaceBetween>
-          <Logo/>
-          <BtnAddMovie>+ Add Movie</BtnAddMovie>
-        </ContainerSpaceBetween>
+      <Container>
+        <ContainerColumn>
+          <ContainerSpaceBetween>
+            <Logo/>
+            <BtnAddMovie>+ Add Movie</BtnAddMovie>
+          </ContainerSpaceBetween>
 
-        <Title/>
+          <Title/>
 
-        <Container>
-          <InputSearchMovie
-            placeholder="What do you want to watch?"
-            ref={inputRef}
-            type="text"
-          />
-          <BtnSearchMovie
-            onClick={searchMovie}
-          >Search
-          </BtnSearchMovie>
-        </Container>
-      </ContainerColumn>
+          <ContainerRow>
+            <InputSearchMovie
+              placeholder="What do you want to watch?"
+              ref={inputRef}
+              type="text"
+            />
+            <BtnSearchMovie
+              onClick={searchMovie}
+            >Search
+            </BtnSearchMovie>
+          </ContainerRow>
+        </ContainerColumn>
+      </Container>
     </HeaderC>
   );
 };

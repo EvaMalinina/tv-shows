@@ -1,5 +1,3 @@
-import { ThemeProvider } from 'styled-components';
-
 export const theme = {
   $red:'#F65261',
   $white:'#FFF',
@@ -7,4 +5,5 @@ export const theme = {
   $grey:'#424242',
   $darkGrey:'#232323',
   $btnBg: 'rgba(85, 85, 85, 0.5)',
+  $trans: 'transparent'
 }

@@ -12,11 +12,14 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: 'asset/resource' },
       {
         test: /\.(ts|js)x?$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+      },
+      {
+        test: /\.(png|svg|jpe?g|gif)$/i,
+        type: 'asset/resource',
       },
       // {
       //   test: /\.m?js$/,

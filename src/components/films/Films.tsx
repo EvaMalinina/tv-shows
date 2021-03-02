@@ -1,24 +1,18 @@
 import * as React from "react";
-import {useEffect, useRef, useState} from "react";
+import { Container, ContainerColumn } from "../../styles/general";
 import { FilmsC } from './films.styled';
+import FilmsHeaderC from "./components/filmsHeader/FilmsHeader";
+import FilmsListC from "./components/filmsList/FilmsList";
 
 const Films = () => {
-
-  const [ categories ] = useState(['all',  'documentary', 'comedy', 'horror', 'crime'])
-
   return (
     <FilmsC>
-      <nav>
-        <ul>
-          { categories.map((cat) => {
-            return(
-              <li key={cat}>
-                {cat}
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
+      <Container>
+        <ContainerColumn>
+          <FilmsHeaderC/>
+          <FilmsListC/>
+        </ContainerColumn>
+      </Container>
     </FilmsC>
   );
 };
