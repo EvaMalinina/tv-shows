@@ -25,7 +25,9 @@ const FilmsItemC = ({slug}: {slug: string}) => {
       .then(res => res.json())
       .then(({title, poster, plot, year}) =>
         setMovieDetails({title, poster, plot, year})
-      )
+      ).catch((error) => {
+        throw new Error(error)
+    });
   }, [])
 
   return !!movieDetails && (

@@ -20,31 +20,7 @@ module.exports = {
       {
         test: /\.(png|svg|jpe?g|gif)$/i,
         type: 'asset/resource',
-      },
-      // {
-      //   test: /\.m?js$/,
-      //   exclude: /node_modules/,
-      //   use: {
-      //     loader: 'babel-loader',
-      //     options: {
-      //       presets: [
-      //         ['@babel/preset-env', { targets: "defaults" }]
-      //       ]
-      //     }
-      //   }
-      // },
-      // {
-      //   test: /\.tsx?$/,
-      //   use: {
-      //     loader: 'ts-loader',
-      //     options: {
-      //       getCustomTransformers: {
-      //         before: [styledComponentsTransformer]
-      //       }
-      //     }
-      //   },
-      //   exclude: /node_modules/,
-      // },
+      }
     ]
   },
   resolve: {
