@@ -14,6 +14,11 @@ export const FilmsHeader = styled.div`
 export const FilmsNav = styled.ul`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+
+  @media (max-width: ${props => props.theme.mobile}) {
+    justify-content: center;
+  }
 `
 
 export const FilmsItem = styled.li`
@@ -39,8 +44,17 @@ export const FilmsItem = styled.li`
   &:hover:after {
     display: flex;
   }
+
+  @media (max-width: ${props => props.theme.mobile}) {
+    margin: 0 25px 20px 0;
+  }
 `
 export const Sorting = styled.div`
+
+  @media (max-width: ${props => props.theme.mobile}) {
+    margin: 0 auto;
+  }
+  
   label {
     color: ${props => props.theme.$lightGrey};
   }

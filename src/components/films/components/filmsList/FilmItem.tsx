@@ -43,3 +43,4 @@ const FilmsItemC = ({slug}: {slug: string}) => {
 }
 
 export default FilmsItemC;
+

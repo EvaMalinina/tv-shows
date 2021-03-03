@@ -18,6 +18,10 @@ export const InputSearchMovie = styled.input`
   letter-spacing: 1px;
   border: none;
   min-width: 300px;
+
+  @media (max-width: ${props => props.theme.mobile}) {
+    min-width: 90%;
+  }
 `
 
 export const BtnSearchMovie = styled.button`
@@ -29,6 +33,10 @@ export const BtnSearchMovie = styled.button`
   overflow: hidden;
   letter-spacing: 1px;
   margin-left: 25px;
+
+  @media (max-width: ${props => props.theme.mobile}) {
+    margin: 20px 0 0;
+  }
 `
 
 export const HeaderC = styled.header`

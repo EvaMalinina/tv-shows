@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const FilmsQ = styled.div`
   color: ${props => props.theme.$white};
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `
 
 export const Movie = styled.div`
@@ -12,4 +12,8 @@ export const Movie = styled.div`
   width: 200px;
   min-height: 400px;
   text-align: left;
+
+  @media (max-width: ${props => props.theme.mobile}) {
+    margin: 0 0 20px;
+  }
 `

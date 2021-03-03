@@ -14,11 +14,16 @@ export const ContainerColumn = styled.div`
 export const ContainerRow = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 `
 
 export const ContainerRowAlignStart = styled(ContainerRow)`
   align-items: start;
-  flex-wrap: wrap;
+  justify-content: center;
+  // @media (max-width: ${props => props.theme.mobile}) {
+  //   margin: 0 0 20px;
+  //   align-items: center;
+  // }
 `
 
 export const ContainerSpaceBetween = styled(ContainerRow)`
