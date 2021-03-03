@@ -3,7 +3,6 @@ import { Container, ContainerColumn } from "../../styles/general";
 import { FilmsC } from './films.styled';
 import FilmsHeaderC from "./components/filmsHeader/FilmsHeader";
 import FilmsListC from "./components/filmsList/FilmsList";
-import ErrorBoundary from "./components/filmsList/ErrorBoundary";
 
 const Films = () => {
   return (
@@ -11,9 +10,7 @@ const Films = () => {
       <Container>
         <ContainerColumn>
           <FilmsHeaderC/>
-          <ErrorBoundary>
-            <FilmsListC/>
-          </ErrorBoundary>
+          <FilmsListC/>
         </ContainerColumn>
       </Container>
     </FilmsC>
