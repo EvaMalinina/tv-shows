@@ -7,5 +7,5 @@ export const theme = {
   $btnBg: 'rgba(85, 85, 85, 0.5)',
   $trans: 'transparent',
 
-  mobile: '320px',
+  mobile: '380px',
 }
