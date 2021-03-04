@@ -9,6 +9,7 @@ export const Container = styled.div`
 export const ContainerColumn = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 
 export const ContainerRow = styled.div`

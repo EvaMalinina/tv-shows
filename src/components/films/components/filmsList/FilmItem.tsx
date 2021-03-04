@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ContainerColumn } from "../../../../styles/general";
 import { Movie } from "./filmsList.styled";
+import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
 
 interface IMovie {
   title: string;
@@ -34,6 +35,7 @@ const FilmsItemC = ({slug}: {slug: string}) => {
     <Movie>
       <ContainerColumn>
         <img src={movieDetails.poster} style={{ width: '100%', height: '300px'}} />
+        <MovieMenu/>
         <h4>{movieDetails.title}</h4>
         <p>{movieDetails.plot}</p>
         <span>{movieDetails.year}</span>
