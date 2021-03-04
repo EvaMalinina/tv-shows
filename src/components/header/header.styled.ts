@@ -11,13 +11,17 @@ export const BtnAddMovie = styled.button`
 `
 
 export const InputSearchMovie = styled.input`
-  color: ${props => props.theme.$lightGrey};
+  color: ${props => props.theme.$textGrey};
   background-color: ${props => props.theme.$darkGrey};
   padding: 10px;
   font-size: 14px;
   letter-spacing: 1px;
   border: none;
   min-width: 300px;
+  
+  &::placeholder {
+    color: ${props => props.theme.$textGrey};
+  }
 
   @media (max-width: ${props => props.theme.mobile}) {
     min-width: 90%;

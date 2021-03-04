@@ -1,5 +1,5 @@
 import React from 'react';
-import Hero from './components/hero/Hero';
+import Home from './components/home/Home';
 import { ThemeProvider } from 'styled-components';
 import { theme } from "./styles/theme";
 import { GlobalStyles } from "./styles/globalStyles";
@@ -10,7 +10,7 @@ export const App = () => {
     <>
       <GlobalStyles/>
       <ThemeProvider theme={theme}>
-        <Hero/>
+        <Home/>
       </ThemeProvider>
     </>
   )

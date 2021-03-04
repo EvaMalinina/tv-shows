@@ -49,22 +49,3 @@ export const FilmsItem = styled.li`
     margin: 0 25px 20px 0;
   }
 `
-export const Sorting = styled.div`
-
-  @media (max-width: ${props => props.theme.mobile}) {
-    margin: 0 auto;
-  }
-  
-  label {
-    color: ${props => props.theme.$lightGrey};
-  }
-  
-  select {
-    margin-left: 10px;
-    background-color: ${props => props.theme.$trans};
-    color: ${props => props.theme.$white};
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 11px;
-  }
-`

@@ -4,7 +4,7 @@ import Films from "../films/Films";
 import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 
-const Hero = () => {
+const Home = () => {
   return (
     <>
       <ErrorBoundary>
@@ -16,7 +16,7 @@ const Hero = () => {
   )
 };
 
-export default Hero;
+export default Home;
 
 
 

@@ -2,14 +2,14 @@ import React from "react";
 import { ContainerSpaceBetween } from "../../../../styles/general";
 import { FilmsHeader } from "./filmsHeader.styled";
 import FilmsNavC from "./FilmsNav";
-import FilmsSortC from "./FilmsSort";
+import FilmSorting from "../../../ui/Select/Select";
 
 const FilmsHeaderC = () => {
   return(
     <FilmsHeader>
       <ContainerSpaceBetween>
         <FilmsNavC/>
-        <FilmsSortC/>
+        <FilmSorting/>
       </ContainerSpaceBetween>
     </FilmsHeader>
   )

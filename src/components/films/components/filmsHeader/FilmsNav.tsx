@@ -8,13 +8,12 @@ const FilmsNavC = () => {
   return(
     <nav>
       <FilmsNav>
-        { categories.map((cat) => {
-          return(
+        { categories.map(cat => (
             <FilmsItem key={cat}>
               {cat}
             </FilmsItem>
           )
-        })}
+        )}
       </FilmsNav>
     </nav>
   )
