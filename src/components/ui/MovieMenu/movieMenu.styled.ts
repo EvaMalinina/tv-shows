@@ -29,6 +29,7 @@ export const MovieMenuUl = styled.ul`
 
 export const MovieMenuLi = styled.li`
   padding: 5px;
+  display: flex;
   
   button {
     background-color: ${props => props.theme.$trans};

@@ -10,8 +10,12 @@ interface IMovie {
   year: string;
 }
 
-const FilmsItemC = ({slug}: {slug: string}) => {
-  const [movieDetails, setMovieDetails] = useState<IMovie>();
+interface IFilmItemProps {
+  slug: string;
+}
+
+const FilmsItemC = ({slug}: IFilmItemProps) => {
+  const [movieDetails, setMovieDetails] = useState<IMovie|null>(null);
   const apiBaseURL = 'https://imdb-internet-movie-database-unofficial.p.rapidapi.com/film/',
     headers = {
       "method": "GET",
