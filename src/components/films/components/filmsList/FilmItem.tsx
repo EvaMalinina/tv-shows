@@ -14,16 +14,27 @@ interface IFilmItemProps {
   slug: string;
 }
 
+interface IKeys {
+  "x-rapidapi-key": string | undefined;
+  "x-rapidapi-host": string | undefined;
+}
+
+// having issues for typing of headers
+interface IHeaders {
+  method: string;
+  headers: Headers | string[][] | IKeys | any;
+}
+
 const FilmsItemC = ({slug}: IFilmItemProps) => {
   const [movieDetails, setMovieDetails] = useState<IMovie|null>(null);
-  const apiBaseURL = 'https://imdb-internet-movie-database-unofficial.p.rapidapi.com/film/',
-    headers = {
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-key": "647a93cc65msh50494ccaf2a1f63p19a4dajsnd4639551f841",
-        "x-rapidapi-host": "imdb-internet-movie-database-unofficial.p.rapidapi.com"
-      }
-    }
+  const apiBaseURL: string = 'https://imdb-internet-movie-database-unofficial.p.rapidapi.com/film/',
+         headers: IHeaders = {
+            method: "GET",
+            headers: {
+              "x-rapidapi-key": process.env.XRapidapiKey,
+              "x-rapidapi-host": process.env.XRapidapiHost
+            }
+          }
 
   useEffect(() => {
     fetch(apiBaseURL+encodeURI(slug), headers)
@@ -35,7 +46,7 @@ const FilmsItemC = ({slug}: IFilmItemProps) => {
     });
   }, [])
 
-  return !!movieDetails && (
+  return movieDetails && (
     <Movie>
       <ContainerColumn>
         <img src={movieDetails.poster} style={{ width: '100%', height: '300px'}} />

@@ -8,7 +8,7 @@ interface IMovieDetails {
   genre: string[]
 }
 
-const FilmsListC = () => {
+export const FilmsListC = () => {
 
   const [movies] = useState<IMovieDetails[]>([
     {slug: "knocking on heaven's door", genre: ['drama', 'criminal']},
@@ -17,8 +17,8 @@ const FilmsListC = () => {
     {slug: "matrix", genre: ['sci-fi', 'action']},
     {slug: "Amelie", genre: ['comedy']},
     {slug: "Showshank redemption", genre: ['drama', 'criminal']}
-  ])
-  const [q, setQ] = useState<number>(7)
+  ]);
+  const [q, setQ] = useState<number>(7);
 
   return (
     <ContainerColumn>
@@ -27,7 +27,6 @@ const FilmsListC = () => {
         {
           movies.map(({slug}) => {
             return(
-              // having trouble to solve this ts error
               <FilmItemC key={slug} slug={slug}/>
             )
           })
@@ -37,4 +36,3 @@ const FilmsListC = () => {
   );
 };
 
-export default FilmsListC;

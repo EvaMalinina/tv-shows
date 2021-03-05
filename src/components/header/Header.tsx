@@ -17,7 +17,7 @@ import Logo from "../ui/Logo/Logo";
 
 
 const Header = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement|null>(null);
 
   useEffect(() => {
     if (inputRef.current) {
