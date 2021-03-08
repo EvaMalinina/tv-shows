@@ -1,33 +1,39 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import FilmItemC from "./FilmItem";
 import { ContainerColumn, ContainerRowAlignStart } from  '../../../../styles/general';
 import { FilmsQ } from './filmsList.styled';
-
-interface IMovieDetails {
-  slug: string;
-  genre: string[]
-}
+import axios from "axios";
 
 export const FilmsListC = () => {
-
-  const [movies] = useState<IMovieDetails[]>([
-    {slug: "knocking on heaven's door", genre: ['drama', 'criminal']},
-    {slug: "interstellar", genre: ['sci-fi', 'drama']},
-    {slug: "city lights", genre: ['comedy']},
-    {slug: "matrix", genre: ['sci-fi', 'action']},
-    {slug: "Amelie", genre: ['comedy']},
-    {slug: "Showshank redemption", genre: ['drama', 'criminal']}
-  ]);
   const [q, setQ] = useState<number>(7);
+  const [moviesArr, setMoviesArr] = useState<[] | null>(null);
+
+  useEffect(() => {
+    axios.get(`http://localhost:9000/movies`)
+      .then(res => {
+        const movies = res.data;
+        setMoviesArr(movies);
+      }).catch((err) => {
+        alert('There is a problem during fetching the data from database: '+ err)
+      })
+  }, []);
+
 
   return (
     <ContainerColumn>
       <FilmsQ><b>{q}</b> films found</FilmsQ>
       <ContainerRowAlignStart>
-        {
-          movies.map(({slug}) => {
+        { moviesArr &&
+          moviesArr.map(({name, desc, category, year, img}) => {
             return(
-              <FilmItemC key={slug} slug={slug}/>
+              <FilmItemC
+                key={name}
+                name={name}
+                desc={desc}
+                category={category}
+                year={year}
+                img={img}
+              />
             )
           })
         }

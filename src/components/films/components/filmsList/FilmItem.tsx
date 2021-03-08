@@ -4,56 +4,24 @@ import { Movie } from "./filmsList.styled";
 import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
 
 interface IMovie {
-  title: string;
-  poster: string;
-  plot: string;
-  year: string;
+  img: string,
+  name: string;
+  desc: string;
+  category: string;
+  year: number;
 }
 
-interface IFilmItemProps {
-  slug: string;
-}
 
-interface IKeys {
-  "x-rapidapi-key": string | undefined;
-  "x-rapidapi-host": string | undefined;
-}
+const FilmsItemC = ({name, desc, category, year, img}: IMovie) => {
 
-// having issues for typing of headers
-interface IHeaders {
-  method: string;
-  headers: Headers | string[][] | IKeys | any;
-}
-
-const FilmsItemC = ({slug}: IFilmItemProps) => {
-  const [movieDetails, setMovieDetails] = useState<IMovie|null>(null);
-  const apiBaseURL: string = 'https://imdb-internet-movie-database-unofficial.p.rapidapi.com/film/',
-         headers: IHeaders = {
-            method: "GET",
-            headers: {
-              "x-rapidapi-key": process.env.XRapidapiKey,
-              "x-rapidapi-host": process.env.XRapidapiHost
-            }
-          }
-
-  useEffect(() => {
-    fetch(apiBaseURL+encodeURI(slug), headers)
-      .then(res => res.json())
-      .then(({title, poster, plot, year}) =>
-        setMovieDetails({title, poster, plot, year})
-      ).catch((error) => {
-        throw new Error(error)
-    });
-  }, [])
-
-  return movieDetails && (
+  return img && (
     <Movie>
       <ContainerColumn>
-        <img src={movieDetails.poster} style={{ width: '100%', height: '300px'}} />
+        <img src={img} style={{ width: '100%', height: '300px'}} />
         <MovieMenu/>
-        <h4>{movieDetails.title}</h4>
-        <p>{movieDetails.plot}</p>
-        <span>{movieDetails.year}</span>
+        <h4 style={{textTransform: "capitalize"}}>{name}</h4>
+        <p>{desc}</p>
+        <span>{year}</span>
       </ContainerColumn>
     </Movie>
   )
