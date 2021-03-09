@@ -4,13 +4,13 @@ import { FilmsC } from './films.styled';
 import FilmsHeaderC from "./components/filmsHeader/FilmsHeader";
 import {FilmsListC} from "./components/filmsList/FilmsList";
 
-const Films = () => {
+const Films = ({showEditMoviePopup}) => {
   return (
     <FilmsC>
       <Container>
         <ContainerColumn>
           <FilmsHeaderC/>
-          <FilmsListC/>
+          <FilmsListC showEditMoviePopup={showEditMoviePopup}/>
         </ContainerColumn>
       </Container>
     </FilmsC>

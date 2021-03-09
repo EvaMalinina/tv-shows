@@ -4,7 +4,7 @@ import { ContainerColumn, ContainerRowAlignStart } from  '../../../../styles/gen
 import { FilmsQ } from './filmsList.styled';
 import axios from "axios";
 
-export const FilmsListC = () => {
+export const FilmsListC = ({showEditMoviePopup}) => {
   const [q, setQ] = useState<number>(7);
   const [moviesArr, setMoviesArr] = useState<[] | null>(null);
 
@@ -33,6 +33,7 @@ export const FilmsListC = () => {
                 category={category}
                 year={year}
                 img={img}
+                showEditMoviePopup={showEditMoviePopup}
               />
             )
           })

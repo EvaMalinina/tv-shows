@@ -5,7 +5,8 @@ import {
   Container,
   ContainerRow,
   ContainerColumn,
-  ContainerSpaceBetween
+  ContainerSpaceBetween,
+  WrapperPlaceForward
 } from "../../styles/general";
 import {
   HeaderC,
@@ -55,7 +56,9 @@ const Header = ({showAddMoviePopup}) => {
       <Container>
         <ContainerColumn>
           <ContainerSpaceBetween>
-            <Logo/>
+            <WrapperPlaceForward>
+              <Logo/>
+            </WrapperPlaceForward>
             <BtnAddMovie onClick={showAddMoviePopup}>+ Add Movie</BtnAddMovie>
           </ContainerSpaceBetween>
 

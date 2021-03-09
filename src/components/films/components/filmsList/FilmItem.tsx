@@ -4,21 +4,21 @@ import { Movie } from "./filmsList.styled";
 import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
 
 interface IMovie {
+  name: string,
+  desc: string,
+  category: string,
+  year: number,
   img: string,
-  name: string;
-  desc: string;
-  category: string;
-  year: number;
 }
 
 
-const FilmsItemC = ({name, desc, category, year, img}: IMovie) => {
+const FilmsItemC = ({name, desc, category, year, img, showEditMoviePopup}: IMovie) => {
 
   return img && (
     <Movie>
       <ContainerColumn>
         <img src={img} style={{ width: '100%', height: '300px'}} />
-        <MovieMenu/>
+        <MovieMenu showEditMoviePopup={showEditMoviePopup}/>
         <h4 style={{textTransform: "capitalize"}}>{name}</h4>
         <p>{desc}</p>
         <span>{year}</span>

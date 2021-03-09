@@ -27,3 +27,8 @@ export const ContainerSpaceBetween = styled(ContainerRow)`
   justify-content: space-between;
   min-width: 100%;
 `
+
+export const WrapperPlaceForward = styled.div`
+  display: flex;
+  z-index: 3;
+`

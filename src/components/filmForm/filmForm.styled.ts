@@ -39,6 +39,16 @@ export const Form = styled.form`
     flex-direction: column;
     font-size: 12px;
     letter-spacing: 1px;
+    
+    //.rfs-select-container {
+    //  border: none;
+    //  outline: none;
+    //}
+    
+    .rfs-option, .jAKrMN {
+      color: ${props => props.theme.$white};
+      font-size: 11px;
+    }
   }
   
   input {
@@ -58,4 +68,27 @@ export const BtnPopupClose = styled.button`
   background-color: ${props => props.theme.$trans};
   color: ${props => props.theme.$white};
   font-size: 18px;
+`
+
+export const BtnsWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+`
+
+export const Btn = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+`
+
+export const BtnReset = styled(Btn)`
+  color: ${props => props.theme.$white};
+  margin-right: 10px;
+`
+
+export const BtnAdd = styled(Btn)`
+  color: ${props => props.theme.$red};
 `
