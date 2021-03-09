@@ -3,10 +3,10 @@ import { Select } from 'react-functional-select';
 import { Sorting, SelectContainer  } from "./select.styled";
 import { theme } from "../../../styles/theme";
 
-type Option = Readonly<{
+type Option = {
   id: number;
   type: string;
-}>;
+};
 
 const _sortOptions: Option[] = [
   { id: 1, type: 'release date'},
@@ -26,7 +26,7 @@ const FilmSorting: React.FC = () => {
       <label>
         Sort by
         <SelectContainer>
-          <Select
+          <SelectC
             options={_sortOptions}
             onOptionChange={onOptionChange}
             getOptionValue={getOptionValue}
@@ -40,3 +40,13 @@ const FilmSorting: React.FC = () => {
 };
 
 export default FilmSorting;
+
+
+export const SelectC = ({options, onOptionChange, getOptionValue, getOptionLabel, themeConfig}) =>
+  <Select
+    options={options}
+    onOptionChange={onOptionChange}
+    getOptionValue={getOptionValue}
+    getOptionLabel={getOptionLabel}
+    themeConfig={themeConfig}
+  />

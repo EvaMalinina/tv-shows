@@ -15,7 +15,6 @@ import {
 } from "./header.styled";
 import Title from "../ui/Title/Title";
 import Logo from "../ui/Logo/Logo";
-import AddFilmPopup from "../addFilm/AddFilm";
 
 interface IMovie {
   name: string,
@@ -23,14 +22,13 @@ interface IMovie {
   year: number
 }
 
-const Header = () => {
+const Header = ({showAddMoviePopup}) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [ movie, setMovie ] = useState<IMovie | null>({
     name: "Movie from react",
     desc: "Desc from react",
     year: 1996
   });
-  const [ isAddPopupShown, setAddPopupShown ] = useState<boolean>(false);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -48,11 +46,6 @@ const Header = () => {
       })
   }
 
-  const showAddMoviePopup = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setAddPopupShown(!isAddPopupShown);
-  }
-
   const searchMovie = () => {
     console.log('search')
   }
@@ -63,13 +56,7 @@ const Header = () => {
         <ContainerColumn>
           <ContainerSpaceBetween>
             <Logo/>
-            <BtnAddMovie onClick={(e) => {showAddMoviePopup(e)}}>+ Add Movie</BtnAddMovie>
-            {
-              isAddPopupShown ?
-                <AddFilmPopup popup={showAddMoviePopup}/>
-                :
-                <></>
-            }
+            <BtnAddMovie onClick={showAddMoviePopup}>+ Add Movie</BtnAddMovie>
           </ContainerSpaceBetween>
 
           <Title/>
@@ -85,9 +72,6 @@ const Header = () => {
             >Search
             </BtnSearchMovie>
           </ContainerRow>
-          <form>
-            <button type="submit" onClick={addMovie}>submit</button>
-          </form>
         </ContainerColumn>
       </Container>
     </HeaderC>
