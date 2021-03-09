@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
-import Hero from './Hero';
+import Header from './Header';
 
 
 describe('Text should be correct', () => {
   it('renders the correct text in the document', () => {
-    const { getByText } = render(<Hero />);
-    expect(getByText("Stay tuned, IT world")).toBeInTheDocument();
+    const { getByText } = render(<Header />);
+    expect(getByText("find your movie")).toBeInTheDocument();
   });
 });
