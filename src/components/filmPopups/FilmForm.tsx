@@ -5,15 +5,8 @@ import { Container } from "../../styles/general";
 import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
 import { ILabel } from "../home/Home";
+import {useAddMovieContext} from "../../context/addMovieContext";
 
-interface IFuncProps {
-  popup(e: React.FormEvent): void;
-}
-
-interface FilmPopupProps {
-  popup: IFuncProps,
-  labels: ILabel
-}
 
 type Option = {
   id: number;
@@ -28,7 +21,8 @@ const _genreOptions: Option[] = [
 ];
 
 
-const FilmPopup = ({popup, labels}: FilmPopupProps) => {
+const FilmPopup = (labels: ILabel) => {
+  let { isAddPopupShown, setAddPopupShown } = useAddMovieContext();
   const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
 
   const resetForm = (e: { preventDefault: () => void; }) => {
@@ -40,13 +34,18 @@ const FilmPopup = ({popup, labels}: FilmPopupProps) => {
     e.preventDefault();
   };
 
+  const closePopup = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    setAddPopupShown(!isAddPopupShown);
+  };
+
   return (
     // having issues with ts typing
     <Bg>
       <BgForm>
         <Container>
           <Form>
-            <BtnPopupClose onClick={popup}>&#10005;</BtnPopupClose>
+            <BtnPopupClose onClick={closePopup}>&#10005;</BtnPopupClose>
             <h2>{labels.mainTitle}</h2>
 
             <label htmlFor="title">

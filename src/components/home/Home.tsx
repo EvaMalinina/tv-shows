@@ -1,11 +1,12 @@
 import React, {useState} from "react";
-import Header from '../header/Header';
 import Films from "../films/Films";
+import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import FilmPopup from "../filmPopups/FilmForm";
 import FilmDeletePopup from "../filmPopups/FilmDeletePopup";
 import Logo from "../ui/Logo/Logo";
+import { AddMovieContext } from "../../context/addMovieContext";
 
 
 export interface ILabel {
@@ -35,11 +36,6 @@ const Home = () => {
   const [ isDeletePopupShown, setDeletePopupShown ] = useState<boolean>(false);
 
 
-  const showAddMoviePopup = (e: React.FormEvent): void => {
-    e.preventDefault();
-    setAddPopupShown(!isAddPopupShown);
-  }
-
   const showEditMoviePopup = (e: React.FormEvent): void => {
     e.preventDefault();
     setEditPopupShown(!isEditPopupShown);
@@ -52,35 +48,37 @@ const Home = () => {
 
   return (
     <>
-      <ErrorBoundary>
-        {
-          isAddPopupShown ?
-            <FilmPopup popup={showAddMoviePopup} labels={labelOptions}/>
-            :
-            <></>
-        }
-        {
-          isEditPopupShown ?
-            // pass film data
-            <FilmPopup popup={showEditMoviePopup} labels={labelOptions}/>
-            :
-            <></>
-        }
-        {
-          isDeletePopupShown ?
-            <FilmDeletePopup popup={showDeleteMoviePopup} />
-            :
-            <></>
-        }
-        <Header showAddMoviePopup={showAddMoviePopup}/>
-        <Films
-          showEditMoviePopup={showEditMoviePopup}
-          showDeleteMoviePopup={showDeleteMoviePopup}
-        />
-        <Footer>
-          <Logo/>
-        </Footer>
-      </ErrorBoundary>
+      <AddMovieContext.Provider value={{isAddPopupShown, setAddPopupShown }}>
+        <ErrorBoundary>
+          {
+            isAddPopupShown ?
+              <FilmPopup labels={labelOptions}/>
+              :
+              <></>
+          }
+          {
+            isEditPopupShown ?
+              // pass film data
+              <FilmPopup popup={showEditMoviePopup} labels={labelOptions}/>
+              :
+              <></>
+          }
+          {
+            isDeletePopupShown ?
+              <FilmDeletePopup popup={showDeleteMoviePopup} />
+              :
+              <></>
+          }
+          <Header/>
+          <Films
+            showEditMoviePopup={showEditMoviePopup}
+            showDeleteMoviePopup={showDeleteMoviePopup}
+          />
+          <Footer>
+            <Logo/>
+          </Footer>
+        </ErrorBoundary>
+      </AddMovieContext.Provider>
     </>
   )
 };

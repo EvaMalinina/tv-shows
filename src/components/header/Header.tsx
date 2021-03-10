@@ -16,6 +16,7 @@ import {
 } from "./header.styled";
 import Title from "../ui/Title/Title";
 import Logo from "../ui/Logo/Logo";
+import { useAddMovieContext } from "../../context/addMovieContext";
 
 interface IMovie {
   name: string,
@@ -23,7 +24,8 @@ interface IMovie {
   year: number
 }
 
-const Header = ({showAddMoviePopup}) => {
+const Header = () => {
+  let { setAddPopupShown } = useAddMovieContext();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [ movie, setMovie ] = useState<IMovie | null>({
     name: "Movie from react",
@@ -59,7 +61,7 @@ const Header = ({showAddMoviePopup}) => {
             <WrapperPlaceForward>
               <Logo/>
             </WrapperPlaceForward>
-            <BtnAddMovie onClick={showAddMoviePopup}>+ Add Movie</BtnAddMovie>
+            <BtnAddMovie onClick={setAddPopupShown}>+ Add Movie</BtnAddMovie>
           </ContainerSpaceBetween>
 
           <Title/>
