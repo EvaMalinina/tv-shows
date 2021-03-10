@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {Btn} from "../../styles/general";
 
 export const Bg = styled.div`
   background-color: ${props => props.theme.$bg};
@@ -30,6 +31,13 @@ export const Form = styled.form`
     font-weight: 400;
     letter-spacing: 1px;
   }
+
+  p {
+    color: ${props => props.theme.$white};
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: 300;
+  }
   
   label {
     margin-bottom: 15px;
@@ -40,23 +48,25 @@ export const Form = styled.form`
     font-size: 12px;
     letter-spacing: 1px;
     
-    //.rfs-select-container {
-    //  border: none;
-    //  outline: none;
-    //}
+    .rfs-select-container {
+      margin-top: 5px;
+    }
     
-    .rfs-option, .jAKrMN {
-      color: ${props => props.theme.$white};
-      font-size: 11px;
+    .rfs-autosize-input {
+      background-color: ${props => props.theme.$trans};
+      padding: 0px;
     }
   }
   
   input {
-    background-color: ${props => props.theme.$lightGrey};
+    background-color: ${props => props.theme.$btnBg};
     color: ${props => props.theme.$white};
-    padding: 5px;
+    padding: 9px;
     margin-top: 7px;
     width: 100%;
+    font-size: 15px;
+    border-radius: 3px;
+    overflow: hidden;
   }
 `
 
@@ -77,18 +87,16 @@ export const BtnsWrapper = styled.div`
   width: 100%;
 `
 
-export const Btn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px;
-`
-
 export const BtnReset = styled(Btn)`
-  color: ${props => props.theme.$white};
-  margin-right: 10px;
+  background-color: ${props => props.theme.$trans};
+  margin-right: 20px;
+  border: 1px solid ${props => props.theme.$red};
+  padding: 8px 20px;
 `
 
-export const BtnAdd = styled(Btn)`
-  color: ${props => props.theme.$red};
+export const BtnSubmit = styled(Btn)`
+  background-color: ${props => props.theme.$red};
+  color: ${props => props.theme.$white};
+  padding: 8px 20px;
+  align-self: flex-end;
 `

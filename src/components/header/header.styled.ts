@@ -1,12 +1,11 @@
 import styled from "styled-components";
 import headerBg from "../../assets/headerBg.jpg";
+import { Btn } from "../../styles/general";
 
 
-export const BtnAddMovie = styled.button`
-  background-color: ${props => props.theme.$btnBg};
+export const BtnAddMovie = styled(Btn)`
+  border-radius: 0;
   padding: 5px 8px;
-  text-transform: uppercase;
-  color: ${props => props.theme.$red};
   justify-self: end;
 `
 
@@ -28,14 +27,9 @@ export const InputSearchMovie = styled.input`
   }
 `
 
-export const BtnSearchMovie = styled.button`
+export const BtnSearchMovie = styled(Btn)`
   background-color: ${props => props.theme.$red};
   color: ${props => props.theme.$white};
-  text-transform: uppercase;
-  padding: 10px 15px;
-  border-radius: 2px;
-  overflow: hidden;
-  letter-spacing: 1px;
   margin-left: 25px;
 
   @media (max-width: ${props => props.theme.mobile}) {

@@ -3,7 +3,8 @@ import Header from '../header/Header';
 import Films from "../films/Films";
 import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
-import FilmPopup from "../filmForm/FilmForm";
+import FilmPopup from "../filmPopups/FilmForm";
+import FilmDeletePopup from "../filmPopups/FilmDeletePopup";
 
 
 export interface ILabel {
@@ -24,12 +25,13 @@ const labelOptions: ILabel = {
   url: 'Movie URL here',
   overview: 'Overview',
   runtime: 'Runtime',
-  btnSubmit: 'Add'
+  btnSubmit: 'Submit'
 }
 
 const Home = () => {
   const [ isAddPopupShown, setAddPopupShown ] = useState<boolean>(false);
   const [ isEditPopupShown, setEditPopupShown ] = useState<boolean>(false);
+  const [ isDeletePopupShown, setDeletePopupShown ] = useState<boolean>(false);
 
 
   const showAddMoviePopup = (e: React.FormEvent): void => {
@@ -40,6 +42,11 @@ const Home = () => {
   const showEditMoviePopup = (e: React.FormEvent): void => {
     e.preventDefault();
     setEditPopupShown(!isEditPopupShown);
+  }
+
+  const showDeleteMoviePopup =  (e: React.FormEvent): void => {
+    e.preventDefault();
+    setDeletePopupShown(!isDeletePopupShown);
   }
 
   return (
@@ -53,12 +60,22 @@ const Home = () => {
         }
         {
           isEditPopupShown ?
+            // pass film data
             <FilmPopup popup={showEditMoviePopup} labels={labelOptions}/>
             :
             <></>
         }
+        {
+          isDeletePopupShown ?
+            <FilmDeletePopup popup={showDeleteMoviePopup} />
+            :
+            <></>
+        }
         <Header showAddMoviePopup={showAddMoviePopup}/>
-        <Films showEditMoviePopup={showEditMoviePopup}/>
+        <Films
+          showEditMoviePopup={showEditMoviePopup}
+          showDeleteMoviePopup={showDeleteMoviePopup}
+        />
         <Footer/>
       </ErrorBoundary>
     </>

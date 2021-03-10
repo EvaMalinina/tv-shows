@@ -32,3 +32,13 @@ export const WrapperPlaceForward = styled.div`
   display: flex;
   z-index: 3;
 `
+
+export const Btn = styled.button`
+  padding: 10px 15px;
+  text-transform: uppercase;
+  color: ${props => props.theme.$red};
+  background-color: ${props => props.theme.$btnBg};
+  border-radius: 2px;
+  overflow: hidden;
+  letter-spacing: 1px;
+`

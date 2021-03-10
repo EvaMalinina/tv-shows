@@ -2,11 +2,12 @@ import React, {useState} from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
 
 
-const MovieMenu = ({showEditMoviePopup}) => {
+const MovieMenu = ({showEditMoviePopup, showDeleteMoviePopup}) => {
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
-  const handleClick = () => {
+  const handleClick = (e: { stopPropagation: () => void; }) => {
+    e.stopPropagation();
     setIsClicked(!isClicked);
   }
 
@@ -17,15 +18,12 @@ const MovieMenu = ({showEditMoviePopup}) => {
       </MovieMenuStyled>
       {
         isClicked ?
-          <MovieMenuUl>
+          <MovieMenuUl onMouseLeave={handleClick}>
             <MovieMenuLi>
               <button onClick={showEditMoviePopup}>Edit</button>
             </MovieMenuLi>
             <MovieMenuLi>
-              <button>Remove</button>
-            </MovieMenuLi>
-            <MovieMenuLi>
-              <button>Decline</button>
+              <button onClick={showDeleteMoviePopup}>Remove</button>
             </MovieMenuLi>
           </MovieMenuUl>
           :

@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Select } from 'react-functional-select';
 import { theme } from "../../../styles/theme";
+import { SelectWrapper } from './select.styled';
 
 type Option = {
   id: number;
@@ -19,13 +20,15 @@ const SelectC = ({options}: Props) => {
   const getOptionLabel = useCallback((option: Option): string => `${option.type}`, []);
 
   return(
-    <Select
-      options={options}
-      onOptionChange={onOptionChange}
-      getOptionValue={getOptionValue}
-      getOptionLabel={getOptionLabel}
-      themeConfig={theme}
-    />
+    <SelectWrapper>
+      <Select
+        options={options}
+        onOptionChange={onOptionChange}
+        getOptionValue={getOptionValue}
+        getOptionLabel={getOptionLabel}
+        themeConfig={theme}
+      />
+    </SelectWrapper>
   )
 }
 

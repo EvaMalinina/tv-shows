@@ -12,13 +12,16 @@ interface IMovie {
 }
 
 
-const FilmsItemC = ({name, desc, category, year, img, showEditMoviePopup}: IMovie) => {
+const FilmsItemC = ({name, desc, category, year, img, showEditMoviePopup, showDeleteMoviePopup}: IMovie) => {
 
   return img && (
     <Movie>
       <ContainerColumn>
         <img src={img} style={{ width: '100%', height: '300px'}} />
-        <MovieMenu showEditMoviePopup={showEditMoviePopup}/>
+        <MovieMenu
+          showEditMoviePopup={showEditMoviePopup}
+          showDeleteMoviePopup={showDeleteMoviePopup}
+        />
         <h4 style={{textTransform: "capitalize"}}>{name}</h4>
         <p>{desc}</p>
         <span>{year}</span>

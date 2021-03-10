@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
-import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnAdd } from "./filmForm.styled";
+import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
 import { ILabel } from "../home/Home";
 
@@ -31,13 +31,22 @@ const _genreOptions: Option[] = [
 const FilmPopup = ({popup, labels}: FilmPopupProps) => {
   const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
 
+  const resetForm = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+  };
+
+  const sendFilmData = (e: { preventDefault: () => void; }) => {
+    //send data
+    e.preventDefault();
+  };
+
   return (
     // having issues with ts typing
     <Bg>
       <BgForm>
         <Container>
           <Form>
-            <BtnPopupClose onClick={popup}>x</BtnPopupClose>
+            <BtnPopupClose onClick={popup}>&#10005;</BtnPopupClose>
             <h2>{labels.mainTitle}</h2>
 
             <label htmlFor="title">
@@ -78,8 +87,8 @@ const FilmPopup = ({popup, labels}: FilmPopupProps) => {
             </label>
 
             <BtnsWrapper>
-              <BtnReset>Reset</BtnReset>
-              <BtnAdd>{labels.btnSubmit}</BtnAdd>
+              <BtnReset onClick={resetForm}>Reset</BtnReset>
+              <BtnSubmit onClick={sendFilmData}>{labels.btnSubmit}</BtnSubmit>
             </BtnsWrapper>
           </Form>
         </Container>
