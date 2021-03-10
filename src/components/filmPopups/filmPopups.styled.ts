@@ -68,6 +68,11 @@ export const Form = styled.form`
     border-radius: 3px;
     overflow: hidden;
   }
+  
+  #movieId {
+    background-color: ${props => props.theme.$trans};
+    text-transform: uppercase;
+  }
 `
 
 export const BtnPopupClose = styled.button`

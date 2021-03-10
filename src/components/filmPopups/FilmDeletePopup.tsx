@@ -1,25 +1,29 @@
 import React, {FormEvent} from "react";
 import { Bg, BgForm, Form, BtnPopupClose, BtnSubmit } from "./filmPopups.styled";
 import { Container } from "../../styles/general";
+import {useDeleteMovieContext} from "../../context/deleteMovieContext";
 
-interface IFuncProps {
-  popup(e: React.FormEvent): void;
-}
 
-//having troubles with typing
-const deleteFilm = ({e, popup}: {e: { preventDefault: () => void; }, popup: any}) => {
-  //send delete request
-  e.preventDefault();
-  popup();
-};
+const FilmDeletePopup = () => {
+  let { isDeletePopupShown, setDeletePopupShown } = useDeleteMovieContext();
 
-const FilmDeletePopup = ({popup}: IFuncProps) => {
+  const closeDeletePopup = (e: { preventDefault: () => void;}) => {
+    e.preventDefault();
+    setDeletePopupShown(!isDeletePopupShown);
+  }
+
+  const deleteFilm = (e: { preventDefault: () => void;}) => {
+    //send delete request
+    e.preventDefault();
+    setDeletePopupShown(!isDeletePopupShown);
+  };
+
   return (
     <Bg>
       <BgForm>
         <Container>
           <Form>
-            <BtnPopupClose onClick={popup}>&#10005;</BtnPopupClose>
+            <BtnPopupClose onClick={closeDeletePopup}>&#10005;</BtnPopupClose>
             <h2>delete movie</h2>
             <p>Are you sue you want to delete this movie?</p>
             <BtnSubmit onClick={deleteFilm}>Confirm</BtnSubmit>

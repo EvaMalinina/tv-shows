@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import FilmItemC from "./FilmItem";
 import { ContainerColumn, ContainerRowAlignStart } from  '../../../../styles/general';
 import { FilmsQ } from './filmsList.styled';
 import axios from "axios";
 
-export const FilmsListC = ({showEditMoviePopup, showDeleteMoviePopup}) => {
+export const FilmsListC = () => {
   const [q, setQ] = useState<number>(5);
   const [moviesArr, setMoviesArr] = useState<[] | null>(null);
 
@@ -25,6 +25,7 @@ export const FilmsListC = ({showEditMoviePopup, showDeleteMoviePopup}) => {
       <ContainerRowAlignStart>
         { moviesArr &&
           moviesArr.map(({name, desc, category, year, img}) => {
+            // having ts issue here
             return(
               <FilmItemC
                 key={name}
@@ -33,8 +34,6 @@ export const FilmsListC = ({showEditMoviePopup, showDeleteMoviePopup}) => {
                 category={category}
                 year={year}
                 img={img}
-                showEditMoviePopup={showEditMoviePopup}
-                showDeleteMoviePopup={showDeleteMoviePopup}
               />
             )
           })
