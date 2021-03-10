@@ -5,6 +5,7 @@ import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import FilmPopup from "../filmPopups/FilmForm";
 import FilmDeletePopup from "../filmPopups/FilmDeletePopup";
+import Logo from "../ui/Logo/Logo";
 
 
 export interface ILabel {
@@ -76,7 +77,9 @@ const Home = () => {
           showEditMoviePopup={showEditMoviePopup}
           showDeleteMoviePopup={showDeleteMoviePopup}
         />
-        <Footer/>
+        <Footer>
+          <Logo/>
+        </Footer>
       </ErrorBoundary>
     </>
   )
