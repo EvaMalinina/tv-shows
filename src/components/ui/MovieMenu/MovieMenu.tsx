@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
 
 
-const MovieMenu = ({showEditMoviePopup, showDeleteMoviePopup}) => {
+const MovieMenu = ({showEditMoviePopup, showDeleteMoviePopup}: {showEditMoviePopup: Function, showDeleteMoviePopup: Function}) => {
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
