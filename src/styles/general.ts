@@ -42,3 +42,16 @@ export const Btn = styled.button`
   overflow: hidden;
   letter-spacing: 1px;
 `
+
+export const SuspenseWrapper = styled.div`
+  color: ${props => props.theme.$white};
+  background-color: ${props => props.theme.$bg};
+  letter-spacing: 2px;
+  font-weight: 300;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`

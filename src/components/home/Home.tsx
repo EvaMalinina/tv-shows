@@ -3,12 +3,14 @@ import Films from "../films/Films";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
-import FilmPopup from "../filmPopups/FilmForm";
-import FilmDeletePopup from "../filmPopups/FilmDeletePopup";
 import Logo from "../ui/Logo/Logo";
+import { SuspenseWrapper } from "../../styles/general";
 import { AddMovieContext } from "../../context/addMovieContext";
 import { EditMovieContext } from "../../context/editMovieContext";
 import { DeleteMovieContext } from "../../context/deleteMovieContext";
+
+const FilmPopup =  React.lazy(() => import("../filmPopups/FilmForm"));
+const FilmDeletePopup =  React.lazy(() => import("../filmPopups/FilmDeletePopup"));
 
 
 export interface ILabel {
@@ -55,20 +57,26 @@ const Home = () => {
             <ErrorBoundary>
               {
                 isAddPopupShown ?
-                  <FilmPopup labels={labelOptionsAdd}/>
+                  <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
+                    <FilmPopup labels={labelOptionsAdd}/>
+                  </React.Suspense>
                   :
                   <></>
               }
               {
                 isEditPopupShown ?
                   // pass film data
-                  <FilmPopup labels={labelOptionsEdit}/>
+                  <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
+                    <FilmPopup labels={labelOptionsEdit}/>
+                  </React.Suspense>
                   :
                   <></>
               }
               {
                 isDeletePopupShown ?
-                  <FilmDeletePopup/>
+                  <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
+                    <FilmDeletePopup/>
+                  </React.Suspense>
                   :
                   <></>
               }
