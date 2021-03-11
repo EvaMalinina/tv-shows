@@ -9,7 +9,7 @@ export const FilmsListC = () => {
   const [moviesArr, setMoviesArr] = useState<[] | null>(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/movies`)
+    axios.get(`http://localhost:9000/`)
       .then(res => {
         const movies = res.data;
         setMoviesArr(movies);

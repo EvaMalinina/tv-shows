@@ -1,21 +1,39 @@
 const express = require('express');
 const cors = require("cors");
-const mongoose = require("mongoose");
-const moviesRouter = require('./routes/movies');
 const app = express();
-require('dotenv').config();
+const port = 9000;
+const data = require('./data.json');
 
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+app.get('/', (req, res) => {
+  res.send(data);
 })
 
-app.use(moviesRouter);
-app.listen(9000, () => {
-  console.log('Server is running...')
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`)
 })
 
-module.exports = app;
+// const express = require('express');
+// const cors = require("cors");
+// const mongoose = require("mongoose");
+// const moviesRouter = require('./routes/movies');
+// const app = express();
+// require('dotenv').config();
+//
+// app.use(cors());
+// app.use(express.json());
+//
+// mongoose.connect(process.env.connectionString, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+//
+// app.use(moviesRouter);
+// app.listen(9000, () => {
+//   console.log('Server is running...')
+// })
+//
+// module.exports = app;
+
