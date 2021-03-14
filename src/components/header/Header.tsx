@@ -16,7 +16,7 @@ import {
 } from "./header.styled";
 import Title from "../ui/Title/Title";
 import Logo from "../ui/Logo/Logo";
-import { useAddMovieContext } from "../../context/addMovieContext";
+import { useDispatch, actionControlVisibility } from "../../context/modalMovieContext";
 
 interface IMovie {
   name: string,
@@ -25,7 +25,11 @@ interface IMovie {
 }
 
 const Header = () => {
-  let { setAddPopupShown } = useAddMovieContext();
+  const dispatch = useDispatch(),
+        onAddDialogOpen = () => dispatch(
+            actionControlVisibility('add', true)
+        )
+
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [ movie, setMovie ] = useState<IMovie | null>({
     name: "Movie from react",
@@ -61,7 +65,7 @@ const Header = () => {
             <WrapperPlaceForward>
               <Logo/>
             </WrapperPlaceForward>
-            <BtnAddMovie onClick={setAddPopupShown}>+ Add Movie</BtnAddMovie>
+            <BtnAddMovie onClick={onAddDialogOpen}>+ Add Movie</BtnAddMovie>
           </ContainerSpaceBetween>
 
           <Title/>

@@ -1,29 +1,27 @@
-import React, {FormEvent} from "react";
+import React from "react";
 import { Bg, BgForm, Form, BtnPopupClose, BtnSubmit } from "./filmPopups.styled";
 import { Container } from "../../styles/general";
-import {useDeleteMovieContext} from "../../context/deleteMovieContext";
+import { actionControlVisibility, useDispatch, useSelector } from "../../context/modalMovieContext";
 
 
-const FilmDeletePopup = () => {
-  let { isDeletePopupShown, setDeletePopupShown } = useDeleteMovieContext();
+const FilmDeletePopup = ({type}: {type: string}) => {
+  const visible = useSelector(({[type]: visibility}) => visibility),
+        dispatch = useDispatch(),
+        onClose = () => dispatch(actionControlVisibility(type, false))
 
-  const closeDeletePopup = (e: { preventDefault: () => void;}) => {
-    e.preventDefault();
-    setDeletePopupShown(!isDeletePopupShown);
-  }
 
   const deleteFilm = (e: { preventDefault: () => void;}) => {
     //send delete request
     e.preventDefault();
-    setDeletePopupShown(!isDeletePopupShown);
+    onClose()
   };
 
-  return (
+  return !!visible && (
     <Bg>
       <BgForm>
         <Container>
           <Form>
-            <BtnPopupClose onClick={closeDeletePopup}>&#10005;</BtnPopupClose>
+            <BtnPopupClose onClick={onClose}>&#10005;</BtnPopupClose>
             <h2>delete movie</h2>
             <p>Are you sue you want to delete this movie?</p>
             <BtnSubmit onClick={deleteFilm}>Confirm</BtnSubmit>

@@ -1,13 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import Films from "../films/Films";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Logo from "../ui/Logo/Logo";
 import { SuspenseWrapper } from "../../styles/general";
-import { AddMovieContext } from "../../context/addMovieContext";
-import { EditMovieContext } from "../../context/editMovieContext";
-import { DeleteMovieContext } from "../../context/deleteMovieContext";
+import { DialogProvider } from "../../context/modalMovieContext";
 
 const FilmPopup =  React.lazy(() => import("../filmPopups/FilmForm"));
 const FilmDeletePopup =  React.lazy(() => import("../filmPopups/FilmDeletePopup"));
@@ -45,50 +43,23 @@ const labelOptionsEdit: ILabel = {
 }
 
 const Home = () => {
-  const [ isAddPopupShown, setAddPopupShown ] = useState<boolean>(false);
-  const [ isEditPopupShown, setEditPopupShown ] = useState<boolean>(false);
-  const [ isDeletePopupShown, setDeletePopupShown ] = useState<boolean>(false);
 
   return (
     <>
-      <AddMovieContext.Provider value={{ isAddPopupShown, setAddPopupShown }}>
-        <EditMovieContext.Provider value={{ isEditPopupShown, setEditPopupShown }}>
-          <DeleteMovieContext.Provider value={{ isDeletePopupShown, setDeletePopupShown }}>
-            <ErrorBoundary>
-              {
-                isAddPopupShown ?
-                  <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
-                    <FilmPopup labels={labelOptionsAdd}/>
-                  </React.Suspense>
-                  :
-                  <></>
-              }
-              {
-                isEditPopupShown ?
-                  // pass film data
-                  <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
-                    <FilmPopup labels={labelOptionsEdit}/>
-                  </React.Suspense>
-                  :
-                  <></>
-              }
-              {
-                isDeletePopupShown ?
-                  <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
-                    <FilmDeletePopup/>
-                  </React.Suspense>
-                  :
-                  <></>
-              }
-              <Header/>
-              <Films/>
-              <Footer>
-                <Logo/>
-              </Footer>
-            </ErrorBoundary>
-          </DeleteMovieContext.Provider>
-        </EditMovieContext.Provider>
-      </AddMovieContext.Provider>
+      <DialogProvider>
+        <ErrorBoundary>
+          <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
+            <FilmPopup type="add" labels={labelOptionsAdd}/>
+            <FilmPopup type="edit" labels={labelOptionsEdit}/>
+            <FilmDeletePopup type="remove"/>
+          </React.Suspense>
+          <Header/>
+          <Films/>
+          <Footer>
+            <Logo/>
+          </Footer>
+        </ErrorBoundary>
+      </DialogProvider>
     </>
   )
 };

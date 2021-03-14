@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
 import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
 import { ILabel } from "../home/Home";
-import { useAddMovieContext } from "../../context/addMovieContext";
-import { useEditMovieContext } from "../../context/editMovieContext";
+import {
+  actionControlVisibility,
+  useDispatch,
+  useSelector
+} from "../../context/modalMovieContext";
+
 
 
 type Option = {
@@ -22,10 +26,14 @@ const _genreOptions: Option[] = [
 ];
 
 
-const FilmPopup = ({labels}: {labels: ILabel}) => {
-  let { isAddPopupShown, setAddPopupShown } = useAddMovieContext();
-  let { isEditPopupShown, setEditPopupShown } = useEditMovieContext();
+const FilmPopup = ({labels, type}: {labels: ILabel, type: string}) => {
+
+  const visible = useSelector(({[type]: visibility}) => visibility),
+        dispatch = useDispatch(),
+        onClose = () => dispatch(actionControlVisibility(type, false))
+
   const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
+
 
   const resetForm = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
@@ -34,38 +42,22 @@ const FilmPopup = ({labels}: {labels: ILabel}) => {
   const sendFilmData = (e: { preventDefault: () => void; }) => {
     //send data
     e.preventDefault();
-    setAddPopupShown(!isAddPopupShown);
+    onClose();
   };
 
-  const sendEditedFilmData = (e: { preventDefault: () => void; }) => {
-    //send edited data
-    e.preventDefault();
-    setEditPopupShown(!isEditPopupShown);
-  };
 
-  const closeAddMoviePopup = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setAddPopupShown(!isAddPopupShown);
-  };
-
-  const closeEditMoviePopup = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
-    setEditPopupShown(!isEditPopupShown);
-  };
-
-  return (
-    // having issues with ts typing
+  return  !!visible && (
     <Bg>
       <BgForm>
         <Container>
           <Form>
             <h2>{labels.mainTitle}</h2>
+            <BtnPopupClose onClick={onClose}>&#10005;</BtnPopupClose>
             {
-              isAddPopupShown ?
-                <BtnPopupClose onClick={closeAddMoviePopup}>&#10005;</BtnPopupClose>
+              type === 'add' ?
+                <></>
                 :
                 <>
-                  <BtnPopupClose onClick={closeEditMoviePopup}>&#10005;</BtnPopupClose>
                   <label htmlFor="movieId">
                     Movie Id
                     <input id="movieId" placeholder="pdb6fshan" readOnly={true}/>
@@ -82,7 +74,7 @@ const FilmPopup = ({labels}: {labels: ILabel}) => {
               Release Date
               <DatePicker
                 id="date"
-                // selected={startDate}
+                selected={startDate}
                 placeholderText={labels.date}
                 onChange={date => setStartDate(date)}
               />
@@ -112,12 +104,7 @@ const FilmPopup = ({labels}: {labels: ILabel}) => {
 
             <BtnsWrapper>
               <BtnReset onClick={resetForm}>Reset</BtnReset>
-              {
-                isAddPopupShown ?
-                  <BtnSubmit onClick={sendFilmData}>{labels.btnSubmit}</BtnSubmit>
-                  :
-                  <BtnSubmit onClick={sendEditedFilmData}>{labels.btnSubmit}</BtnSubmit>
-              }
+              <BtnSubmit onClick={sendFilmData}>{labels.btnSubmit}</BtnSubmit>
             </BtnsWrapper>
           </Form>
         </Container>
