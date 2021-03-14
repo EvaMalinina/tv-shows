@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { ContainerColumn } from "../../../../styles/general";
 import { Movie } from "./filmsList.styled";
 import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
 
 interface IMovie {
+  name: string,
+  desc: string,
+  category: string,
+  year: number,
   img: string,
-  name: string;
-  desc: string;
-  category: string;
-  year: number;
 }
 
 
 const FilmsItemC = ({name, desc, category, year, img}: IMovie) => {
 
-  return img && (
+  return name && (
     <Movie>
       <ContainerColumn>
         <img src={img} style={{ width: '100%', height: '300px'}} />

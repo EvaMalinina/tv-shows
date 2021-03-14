@@ -1,42 +1,35 @@
 import React, { useState, useCallback } from 'react';
 import { Select } from 'react-functional-select';
-import { Sorting, SelectContainer  } from "./select.styled";
 import { theme } from "../../../styles/theme";
+import { SelectWrapper } from './select.styled';
 
-type Option = Readonly<{
+type Option = {
   id: number;
   type: string;
-}>;
+};
 
-const _sortOptions: Option[] = [
-  { id: 1, type: 'release date'},
-  { id: 2, type: 'more popular'},
-  { id: 3, type: 'less popular'},
-];
+interface Props {
+  options: Option[];
+}
 
-const FilmSorting: React.FC = () => {
+const SelectC = ({options}: Props) => {
   const [selectedOption, setSelectedOption] = useState<Option | null>({ id: 1, type: 'release date'});
 
   const getOptionValue = useCallback((option: Option): number => option.id, []);
   const onOptionChange = useCallback((option: Option | null): void => setSelectedOption(option), []);
   const getOptionLabel = useCallback((option: Option): string => `${option.type}`, []);
 
-  return (
-    <Sorting>
-      <label>
-        Sort by
-        <SelectContainer>
-          <Select
-            options={_sortOptions}
-            onOptionChange={onOptionChange}
-            getOptionValue={getOptionValue}
-            getOptionLabel={getOptionLabel}
-            themeConfig={theme}
-          />
-        </SelectContainer>
-      </label>
-    </Sorting>
-  );
-};
+  return(
+    <SelectWrapper>
+      <Select
+        options={options}
+        onOptionChange={onOptionChange}
+        getOptionValue={getOptionValue}
+        getOptionLabel={getOptionLabel}
+        themeConfig={theme}
+      />
+    </SelectWrapper>
+  )
+}
 
-export default FilmSorting;
+export default SelectC;

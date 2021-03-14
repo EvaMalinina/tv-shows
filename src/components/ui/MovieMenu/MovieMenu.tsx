@@ -1,12 +1,22 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
+import { actionControlVisibility, useDispatch } from "../../../context/modalMovieContext";
 
 
 const MovieMenu = () => {
+  const dispatch = useDispatch(),
+        onEditDialogOpen = () => dispatch(
+            actionControlVisibility('edit', true)
+        ),
+
+        onDeleteDialogOpen = () => dispatch(
+          actionControlVisibility('remove', true)
+        )
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
-  const handleClick = () => {
+  const handleClick = (e: { stopPropagation: () => void; }) => {
+    e.stopPropagation();
     setIsClicked(!isClicked);
   }
 
@@ -17,15 +27,12 @@ const MovieMenu = () => {
       </MovieMenuStyled>
       {
         isClicked ?
-          <MovieMenuUl>
+          <MovieMenuUl onMouseLeave={handleClick}>
             <MovieMenuLi>
-              <button>Edit</button>
+              <button onClick={onEditDialogOpen}>Edit</button>
             </MovieMenuLi>
             <MovieMenuLi>
-              <button>Remove</button>
-            </MovieMenuLi>
-            <MovieMenuLi>
-              <button>Decline</button>
+              <button onClick={onDeleteDialogOpen}>Remove</button>
             </MovieMenuLi>
           </MovieMenuUl>
           :

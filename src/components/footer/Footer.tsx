@@ -1,11 +1,10 @@
 import React from "react";
 import { FooterC } from './footer.styled';
-import Logo from "../ui/Logo/Logo";
 
-const Footer = () => {
+const Footer = ({children}: {children: React.ReactNode}) => {
   return (
     <FooterC>
-      <Logo/>
+      {children}
     </FooterC>
   );
 };

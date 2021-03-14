@@ -6,6 +6,7 @@ export const theme = {
   $darkGrey:'#232323',
   $textGrey: '#a2a2a2',
   $btnBg: 'rgba(85, 85, 85, 0.5)',
+  $bg: 'rgba(0, 0, 0, 0.85)',
   $trans: 'transparent',
 
   mobile: '380px',

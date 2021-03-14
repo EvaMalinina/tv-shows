@@ -14,3 +14,8 @@ Installed and configured Webpack & Babel to get build artifact by running npm co
 DEV and PROD build configurations are set.
 Used env variables, dev server, optimizations for PROD build. 
 Testing is set. 
+
+To start server:
+- cd api
+- npm i
+- npm start
