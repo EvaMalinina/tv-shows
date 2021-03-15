@@ -1,16 +1,19 @@
 import React from "react";
-import { Bg, BgForm, Form, BtnPopupClose, BtnSubmit } from "./filmPopups.styled";
-import { Container } from "../../styles/general";
-import { actionControlVisibility, useDispatch, useSelector } from "../../context/modalMovieContext";
+import {Bg, BgForm, Form, BtnPopupClose, BtnSubmit} from "./filmPopups.styled";
+import {Container} from "../../styles/general";
+import {actionControlVisibility, useDispatch, useSelector} from "../../context/modalMovieContext";
+import {IType} from "./interfaces";
 
 
-const FilmDeletePopup = ({type}: {type: string}) => {
+const FilmDeletePopup = ({type}: IType) => {
+
+  // having troubles typing props here
   const visible = useSelector(({[type]: visibility}) => visibility),
-        dispatch = useDispatch(),
-        onClose = () => dispatch(actionControlVisibility(type, false))
+      dispatch = useDispatch(),
+      onClose = () => dispatch(actionControlVisibility(type, false))
 
 
-  const deleteFilm = (e: { preventDefault: () => void;}) => {
+  const deleteFilm = (e: { preventDefault: () => void; }) => {
     //send delete request
     e.preventDefault();
     onClose()

@@ -1,18 +1,34 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, {createContext, useContext, useReducer} from 'react';
 
 //need add types
 
 interface IActionControlVisibility {
-  modalType: {},
+  modalType: string,
   visibility: boolean
 }
 
+interface IState {
+  add: boolean,
+  edit: boolean,
+  remove: boolean,
+  filmOverview: boolean
+}
+
 interface IReducer {
-  state: {},
+  state: IState,
   action: {
     type: string,
-    payload: any
+    payload?: any
   }
+}
+
+type ActionType = {
+  type: 'SET_MODAL_VISIBILITY'
+}
+
+interface IAction {
+  type: string,
+  payload?: any
 }
 
 export const DialogContext = createContext();
@@ -24,6 +40,7 @@ const defaultState = {
   filmOverview: false
 }
 
+// if I add prop type - IActionControlVisibility - popups stop to work
 export const actionControlVisibility = (modalType, visibility) => ({
   type: 'SET_MODAL_VISIBILITY',
   payload: {
@@ -41,6 +58,7 @@ const reducer = (state, action) => {
     default: return state
   }
 }
+
 
 export const DialogProvider = ({children}: {children: React.ReactNode}) => {
   const [state, dispatch] = useReducer(reducer, defaultState),

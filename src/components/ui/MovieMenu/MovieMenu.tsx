@@ -13,6 +13,7 @@ const MovieMenu = () => {
         },
 
         onDeleteDialogOpen = (e: { stopPropagation: () => void; }) => {
+          console.log('vvv')
             e.stopPropagation();
             dispatch(
                 actionControlVisibility('remove', true)

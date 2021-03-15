@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {Btn} from "../../styles/general";
+import SearchIconLink from "../../assets/search-icon.png";
 
 export const Bg = styled.div`
   background-color: ${props => props.theme.$bg};
@@ -17,6 +18,11 @@ export const BgForm = styled.div`
   padding: 20px 0;
   margin: 5% auto;
   position: relative;
+  
+   @media (max-width: ${props => props.theme.mobile}) {
+    width: 95%;
+    margin: 30px 0;
+  }
 `
 
 export const Form = styled.form`
@@ -109,41 +115,78 @@ export const BtnSubmit = styled(Btn)`
 export const FilmOverviewPopup = styled(Bg)`
   min-height: 200px;
   height: fit-content;
-  position: unset;
+  position: static;
   padding: 30px 0 40px;
+  min-width: 100%;
 `
 
 export const FilmPoster = styled.div`
   width: 200px;
   height: 300px;
+  
+  @media (max-width: ${props => props.theme.mobile}) {
+    margin-bottom: 20px;
+  }
 `
 
 export const FilmInfo = styled.div`
   margin-left: 30px;
   width: 65%;
-  
-  div {
-    display: flex;
-  }
+  color: ${props => props.theme.$smokyWhite};
+  font-weight: 300;
   
   h2 {
-    color: ${props => props.theme.$white};
+    margin: 0;
+    text-transform: capitalize;
+    
+    @media (max-width: ${props => props.theme.mobile}) {
+      margin-bottom: 10px;
+      width: 100%;
+    }
   }
   
   h2 ~ div {
-    width: 30px;
-    height: 30px;
-    border: 1px soled color: ${props => props.theme.$white};
+    width: 40px;
+    height: 40px;
+    border: 1px solid ${props => props.theme.$smokyWhite};
     border-radius: 50%;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    color:  ${props => props.theme.$white};
+    color:  ${props => props.theme.$green};
+    margin-left: 20px;
+    font-weight: 400;
+    
+    @media (max-width: ${props => props.theme.mobile}) {
+      align-self: center;
+      margin: 0 0 10px;
+    }
   }
   
   p {
-    margin-bottom: 20px;
-    color: ${props => props.theme.$white};
+    font-size: 14px;
   }
+`
+
+export const Subtitle = styled.div`
+  margin: 0 0 20px;
+  font-size: 12px;
+`
+
+export const FilmInfoColorRed = styled.span`
+  color:  ${props => props.theme.$red};
+  font-size: 18px;
+  margin: 0 30px 15px 0;
+  
+  &:last-child {
+    margin-right: 0;
+  }
+`
+
+export const SearchIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  background: url(${SearchIconLink}) center no-repeat;
+  background-size: contain;
 `
