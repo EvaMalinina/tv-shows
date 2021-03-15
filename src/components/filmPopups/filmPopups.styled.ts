@@ -105,3 +105,45 @@ export const BtnSubmit = styled(Btn)`
   padding: 8px 20px;
   align-self: flex-end;
 `
+
+export const FilmOverviewPopup = styled(Bg)`
+  min-height: 200px;
+  height: fit-content;
+  position: unset;
+  padding: 30px 0 40px;
+`
+
+export const FilmPoster = styled.div`
+  width: 200px;
+  height: 300px;
+`
+
+export const FilmInfo = styled.div`
+  margin-left: 30px;
+  width: 65%;
+  
+  div {
+    display: flex;
+  }
+  
+  h2 {
+    color: ${props => props.theme.$white};
+  }
+  
+  h2 ~ div {
+    width: 30px;
+    height: 30px;
+    border: 1px soled color: ${props => props.theme.$white};
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:  ${props => props.theme.$white};
+  }
+  
+  p {
+    margin-bottom: 20px;
+    color: ${props => props.theme.$white};
+  }
+`

@@ -5,7 +5,7 @@ import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Logo from "../ui/Logo/Logo";
 import { SuspenseWrapper } from "../../styles/general";
-import { DialogProvider } from "../../context/modalMovieContext";
+import {DialogProvider, useSelector} from "../../context/modalMovieContext";
 
 const FilmPopup =  React.lazy(() => import("../filmPopups/FilmForm"));
 const FilmDeletePopup =  React.lazy(() => import("../filmPopups/FilmDeletePopup"));
@@ -15,11 +15,13 @@ export interface ILabel {
   mainTitle: string,
   title: string,
   date: string,
-  url: string,
-  // genre?: string,
+  url?: string,
+  genre?: string,
   overview: string,
   runtime: string,
-  btnSubmit: string
+  btnSubmit?: string,
+  img?: string,
+  rating?: number
 }
 
 const labelOptionsAdd: ILabel = {
@@ -54,6 +56,7 @@ const Home = () => {
             <FilmDeletePopup type="remove"/>
           </React.Suspense>
           <Header/>
+
           <Films/>
           <Footer>
             <Logo/>

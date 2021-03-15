@@ -20,7 +20,8 @@ export const DialogContext = createContext();
 const defaultState = {
   add: false,
   edit: false,
-  remove: false
+  remove: false,
+  filmOverview: false
 }
 
 export const actionControlVisibility = (modalType, visibility) => ({
