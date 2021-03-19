@@ -5,13 +5,20 @@ import { actionControlVisibility, useDispatch } from "../../../context/modalMovi
 
 const MovieMenu = () => {
   const dispatch = useDispatch(),
-        onEditDialogOpen = () => dispatch(
-            actionControlVisibility('edit', true)
-        ),
+        onEditDialogOpen = (e: { stopPropagation: () => void; }) => {
+            e.stopPropagation();
+            dispatch(
+                actionControlVisibility('edit', true)
+            )
+        },
 
-        onDeleteDialogOpen = () => dispatch(
-          actionControlVisibility('remove', true)
-        )
+        onDeleteDialogOpen = (e: { stopPropagation: () => void; }) => {
+          console.log('vvv')
+            e.stopPropagation();
+            dispatch(
+                actionControlVisibility('remove', true)
+            )
+        }
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
 

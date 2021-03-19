@@ -2,6 +2,7 @@ import React from "react";
 import { ContainerColumn } from "../../../../styles/general";
 import { Movie } from "./filmsList.styled";
 import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
+import {actionControlVisibility, useDispatch} from "../../../../context/modalMovieContext";
 
 interface IMovie {
   name: string,
@@ -13,9 +14,13 @@ interface IMovie {
 
 
 const FilmsItemC = ({name, desc, category, year, img}: IMovie) => {
+  const dispatch = useDispatch(),
+      onFilmOverviewOpen = () => dispatch(
+          actionControlVisibility('filmOverview', true)
+      )
 
   return name && (
-    <Movie>
+    <Movie onClick={onFilmOverviewOpen}>
       <ContainerColumn>
         <img src={img} style={{ width: '100%', height: '300px'}} />
         <MovieMenu/>

@@ -38,8 +38,12 @@ export const BtnSearchMovie = styled(Btn)`
 `
 
 export const HeaderC = styled.header`
-  padding: 30px 0 60px;
   background-image: url(${headerBg});
   margin-bottom: 8px;
 `
+
+export const HeaderPadding = styled.header`
+  padding: 30px 0 60px;
+`
+
 

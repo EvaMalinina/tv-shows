@@ -56,7 +56,7 @@ export const Sorting = styled.div`
   }
   
   label {
-    color: ${props => props.theme.$lightGrey};
+    color: ${props => props.theme.$smokyWhite};
     display: flex;
     align-items: center;
     white-space: nowrap;

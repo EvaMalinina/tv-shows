@@ -4,13 +4,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
 import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
-import { ILabel } from "../home/Home";
 import {
   actionControlVisibility,
   useDispatch,
   useSelector
 } from "../../context/modalMovieContext";
-
+import {IPopupProps} from "./interfaces";
 
 
 type Option = {
@@ -26,8 +25,9 @@ const _genreOptions: Option[] = [
 ];
 
 
-const FilmPopup = ({labels, type}: {labels: ILabel, type: string}) => {
+const FilmPopup = ({labels, type}: IPopupProps) => {
 
+  // having troubles typing props here
   const visible = useSelector(({[type]: visibility}) => visibility),
         dispatch = useDispatch(),
         onClose = () => dispatch(actionControlVisibility(type, false))
@@ -46,7 +46,7 @@ const FilmPopup = ({labels, type}: {labels: ILabel, type: string}) => {
   };
 
 
-  return  !!visible && (
+  return !!visible && (
     <Bg>
       <BgForm>
         <Container>
@@ -72,6 +72,7 @@ const FilmPopup = ({labels, type}: {labels: ILabel, type: string}) => {
 
             <label htmlFor="date">
               Release Date
+              {/*issues with ts error can't be resolved*/}
               <DatePicker
                 id="date"
                 selected={startDate}
