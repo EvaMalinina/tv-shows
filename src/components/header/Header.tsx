@@ -16,9 +16,11 @@ import {
 } from "./header.styled";
 import Title from "../ui/Title/Title";
 import Logo from "../ui/Logo/Logo";
-import {useDispatch, actionControlVisibility, useSelector} from "../../context/modalMovieContext";
 import FilmOverview from "../filmPopups/filmOverview";
 import {ILabel} from "../home/Home";
+import {useDispatch, useSelector} from "react-redux";
+import {controlPopupVisibility} from "../filmPopups/store/actions";
+import {IFilmPopupVisibility} from "../../store/interfaces";
 
 interface IMovie {
   name: string,
@@ -26,9 +28,6 @@ interface IMovie {
   year: number
 }
 
-interface IPopupShowHide {
-  filmOverview: boolean;
-}
 
 const labelOptionsMovieInfo: ILabel = {
   mainTitle: 'Pulp Fiction',
@@ -41,12 +40,12 @@ const labelOptionsMovieInfo: ILabel = {
 }
 
 const Header = () => {
-  const dispatch = useDispatch(),
-      onAddDialogOpen = () => dispatch(
-          actionControlVisibility('add', true)
-      )
+  const dispatch = useDispatch();
+  const onAddDialogOpen = () => {
+    dispatch(controlPopupVisibility('add', true))
+  };
 
-  const visible = useSelector(({filmOverview: visibility}: IPopupShowHide) => visibility);
+  const visible = useSelector(({popupsReducer: {filmOverview: visibility}}: IFilmPopupVisibility) => visibility);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [movie, setMovie] = useState<IMovie | null>({

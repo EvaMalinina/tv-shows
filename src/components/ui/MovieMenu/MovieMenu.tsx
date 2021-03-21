@@ -1,31 +1,31 @@
 import React, { useState } from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
-import { actionControlVisibility, useDispatch } from "../../../context/modalMovieContext";
+import {controlPopupVisibility} from "../../filmPopups/store/actions";
+import {useDispatch} from "react-redux";
 
 
 const MovieMenu = () => {
-  const dispatch = useDispatch(),
-        onEditDialogOpen = (e: { stopPropagation: () => void; }) => {
-            e.stopPropagation();
-            dispatch(
-                actionControlVisibility('edit', true)
-            )
-        },
-
-        onDeleteDialogOpen = (e: { stopPropagation: () => void; }) => {
-          console.log('vvv')
-            e.stopPropagation();
-            dispatch(
-                actionControlVisibility('remove', true)
-            )
-        }
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
-
   const handleClick = (e: { stopPropagation: () => void; }) => {
     e.stopPropagation();
     setIsClicked(!isClicked);
   }
+
+  const dispatch = useDispatch();
+  const onEditDialogOpen = (e: { stopPropagation: () => void; }) => {
+    e.stopPropagation();
+    dispatch(
+      controlPopupVisibility('edit', true)
+    )
+  };
+
+  const onDeleteDialogOpen = (e: { stopPropagation: () => void; }) => {
+    e.stopPropagation();
+    dispatch(
+        controlPopupVisibility('remove', true)
+    )
+  };
 
   return (
     <>

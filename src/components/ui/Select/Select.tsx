@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, {useCallback} from 'react';
 import { Select } from 'react-functional-select';
 import { theme } from "../../../styles/theme";
 import { SelectWrapper } from './select.styled';
@@ -8,15 +8,18 @@ type Option = {
   type: string;
 };
 
+
 interface Props {
   options: Option[];
+  onHandleChange: Function;
 }
 
-const SelectC = ({options}: Props) => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>({ id: 1, type: 'release date'});
+
+const SelectC = ({options, onHandleChange}: Props) => {
+  // const [ selectedOption, setSelectedOption] = useState<Option | null>({ id: 1, type: 'release date'});
 
   const getOptionValue = useCallback((option: Option): number => option.id, []);
-  const onOptionChange = useCallback((option: Option | null): void => setSelectedOption(option), []);
+  const onOptionChange = useCallback((option: Option | null): void => onHandleChange(option), []);
   const getOptionLabel = useCallback((option: Option): string => `${option.type}`, []);
 
   return(

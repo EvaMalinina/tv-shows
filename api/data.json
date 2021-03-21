@@ -5,15 +5,17 @@
     "img": "https://www.washingtonpost.com/graphics/2019/entertainment/oscar-nominees-movie-poster-design/img/bohemian-rhapsody-web.jpg",
     "name": "bohemian rhapsody",
     "desc": "this film is a real story about rich guy who is used to good life, but...",
-    "category" : "comedy"
+    "category" : "comedy",
+    "runtime": 102
   },
   {
-    "id": "60469de1145ad128ce5342ad",
+    "id": "61169de1145ad128ce5342ad",
     "year": 2018,
     "img": "https://images.unsplash.com/photo-1614390325161-fcd924058f8b?ixid=mxwxmja3fdb8mhxwag90by1wywdlfhx8fgvufdb8fhw%3d&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80",
     "name": "china today",
     "desc": "it's all about china",
-    "category" : "documentary"
+    "category" : "documentary",
+    "runtime": 60
   },
   {
     "id": "60239de1145ad128ce5342ad",
@@ -21,7 +23,8 @@
     "img": "https://www.indiewire.com/wp-content/uploads/2019/12/us-1.jpg?w=758",
     "name": "scary you",
     "desc": "he was never like everybody, nothing was same...",
-    "category" : "horror"
+    "category" : "horror",
+    "runtime": 78
   },
   {
     "id": "60469de1145ad128ce5342ad",
@@ -29,7 +32,8 @@
     "img": "https://i.pinimg.com/originals/c9/e3/53/c9e353be53dbf97af5ac9e984ea053b8.jpg",
     "name": "cowboys and aliens",
     "desc": "tomorrow is already planned, you have no time to predict anything.",
-    "category" : "action"
+    "category" : "action",
+    "runtime": 126
   },
   {
     "id": "63129de1145ad128ce5342ad",
@@ -37,7 +41,8 @@
     "img": "https://images.complex.com/complex/images/c_fill,dpr_auto,f_auto,q_90,w_1400/fl_lossy,pg_1/wjnhpz3osrai5aningjl/titanic",
     "name": "titanic",
     "desc": "love story about couple what went on cruise, what happen to be last for both of them.",
-    "category" : "drama"
+    "category" : "drama",
+    "runtime": 59
   }
 ]
 

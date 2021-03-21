@@ -4,11 +4,20 @@ const app = express();
 const port = 9000;
 const data = require('./data.json');
 
+let movieArr = [];
+
 app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send(data);
+  res.send(movieArr.length > 0 ? movieArr : data);
+})
+
+app.post('/movie', (req, res) => {
+  const newMovie = req.body;
+  movieArr = data;
+  movieArr.push({...newMovie, id: Date.now()});
+  res.send({"Movie added!": movieArr});
 })
 
 app.listen(port, () => {

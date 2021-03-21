@@ -2,7 +2,8 @@ import React from "react";
 import { ContainerColumn } from "../../../../styles/general";
 import { Movie } from "./filmsList.styled";
 import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
-import {actionControlVisibility, useDispatch} from "../../../../context/modalMovieContext";
+import {useDispatch} from "react-redux";
+import {controlPopupVisibility} from "../../../filmPopups/store/actions";
 
 interface IMovie {
   name: string,
@@ -14,10 +15,12 @@ interface IMovie {
 
 
 const FilmsItemC = ({name, desc, category, year, img}: IMovie) => {
-  const dispatch = useDispatch(),
-      onFilmOverviewOpen = () => dispatch(
-          actionControlVisibility('filmOverview', true)
-      )
+  const dispatch = useDispatch();
+  const onFilmOverviewOpen = () => {
+    dispatch(
+        controlPopupVisibility('filmOverview', true)
+    )
+  };
 
   return name && (
     <Movie onClick={onFilmOverviewOpen}>

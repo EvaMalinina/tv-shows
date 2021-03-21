@@ -2,27 +2,34 @@ import React, {useCallback, useEffect, useState} from "react";
 import FilmItemC from "./FilmItem";
 import { ContainerColumn, ContainerRowAlignStart } from  '../../../../styles/general';
 import { FilmsQ } from './filmsList.styled';
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { getMoviesDataStart } from "./store/actions";
 
 export const FilmsListC = () => {
   const [q, setQ] = useState<number>(1);
   const [moviesArr, setMoviesArr] = useState<[] | null>(null);
-
-  const getMoviesQ = useCallback(() => {
-    !!moviesArr ? setQ(moviesArr.length) : null;
-  }, [moviesArr])
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get(`http://localhost:9000/`)
-      .then(res => {
-        const movies = res.data;
-        setMoviesArr(movies);
-      }).catch((err) => {
-        alert('There is a problem during fetching the data from database: '+ err)
-      })
+    dispatch(getMoviesDataStart());
+  }, []);
 
+  // not sure about this ..
+  const movies = useSelector(state => state.moviesReducer.movies);
+
+  useEffect(() => {
+    movies && movies.length > 0 ? setMoviesArr(movies) : null;
+  }, [movies]);
+
+  const getMoviesQ = useCallback(() => {
+   !!moviesArr && moviesArr.length > 0 ? setQ(moviesArr.length) : null;
+  }, [moviesArr])
+
+
+  useEffect(() => {
     getMoviesQ();
-  }, [getMoviesQ]);
+  }, [moviesArr])
+
 
 
   return (
@@ -30,11 +37,11 @@ export const FilmsListC = () => {
       <FilmsQ><b>{q}</b> films found</FilmsQ>
       <ContainerRowAlignStart>
         { moviesArr &&
-          moviesArr.map(({name, desc, category, year, img}) => {
+          moviesArr.map(({id, name, desc, category, year, img}) => {
             // having ts issue here
             return(
               <FilmItemC
-                key={name}
+                key={id}
                 name={name}
                 desc={desc}
                 category={category}
