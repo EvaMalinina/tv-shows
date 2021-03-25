@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useState} from "react";
+import React, {FormEvent, useEffect, useRef, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
@@ -9,7 +9,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "./store/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
 import axios from "axios";
-import {baseUrl} from "../../url";
+import { baseUrl } from "../../url";
+import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
+
 
 
 type Option = {
@@ -27,7 +29,12 @@ const _genreOptions: Option[] = [
 
 const FilmPopup = ({labels, type}: IPopupProps) => {
   const initialEmptyMovieData = {
-    title: '', startDate: '03/24/2021',  movieUrl: '', genre: { id: 2, type: 'comedy'}, overview: '', runtime: ''
+    title: '',
+    startDate: '03/24/2021',
+    movieUrl: '',
+    genre: { id: 2, type: 'comedy'},
+    overview: '',
+    runtime: ''
   }
   const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
   const [newMovieData, setNewMovieData] = useState(initialEmptyMovieData);
@@ -35,8 +42,13 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
   // having troubles typing props here
   const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility)
 
+  const movieData = useSelector(state => state.singleMovieReducer.movie)
+
+
   const dispatch = useDispatch();
-  const onClose = () => dispatch(controlPopupVisibility(type, false));
+  const onClose = () => {
+    dispatch(controlPopupVisibility(type, false));
+  }
 
   const handleChange = (e: FormEvent) => {
     let { name, value } = e.target;
@@ -54,13 +66,16 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
   const resetForm = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
+    setNewMovieData(initialEmptyMovieData)
   };
 
   const sendFilmData = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
+    // dispatch(sendNewMovieData());
     axios.post(`${baseUrl}movie`, newMovieData)
         .then((res) => {
+          dispatch(getMoviesDataStart());
           alert('Congrats! Movie added.')
         })
         .catch((err) => {
@@ -68,11 +83,12 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
         })
 
     onClose();
+    resetForm(e);
   };
 
   useEffect(() => {
     console.log(newMovieData)
-  },[newMovieData])
+  },[sendFilmData])
 
 
   return !!visible && (
@@ -89,7 +105,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                 <>
                   <label htmlFor="movieId">
                     Movie Id
-                    <input id="movieId" placeholder="pdb6fshan" readOnly={true}/>
+                    <input id="movieId" placeholder={movieData.movieId} readOnly={true}/>
                   </label>
                 </>
             }
@@ -100,7 +116,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   id="title"
                   name="title"
                   value={newMovieData.title}
-                  placeholder={labels.title}
+                  placeholder={movieData.name}
                   onChange={handleChange}
               />
             </label>
@@ -111,7 +127,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <DatePicker
                 id="date"
                 selected={startDate}
-                placeholderText={labels.date}
+                placeholderText={movieData.year}
                 onChange={(date: Date) => handleDateChange(date)}
               />
             </label>
@@ -122,17 +138,20 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   id="movie-url"
                   name="movieUrl"
                   value={newMovieData.movieUrl}
-                  placeholder={labels.url}
+                  placeholder={movieData.img}
                   onChange={handleChange}
               />
             </label>
 
             <label htmlFor="genre">
               genre
-              <SelectC
-                options={_genreOptions}
-                onHandleChange={(val: Option) => handleGenreChange(val)}
-              />
+              {/*need to stopPropagation, can't resolve*/}
+              {/*<div onMouseDown={e => e.stopPropagation()}>*/}
+                <SelectC
+                  options={_genreOptions}
+                  onHandleChange={(val: Option) => handleGenreChange(val)}
+                />
+              {/*</div>*/}
             </label>
 
             <label htmlFor="overview">
@@ -142,7 +161,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   name="overview"
                   value={newMovieData.overview}
                   onChange={handleChange}
-                  placeholder={labels.overview}
+                  placeholder={movieData.desc}
               />
             </label>
 
@@ -153,7 +172,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   name="runtime"
                   value={newMovieData.runtime}
                   onChange={handleChange}
-                  placeholder={labels.runtime}
+                  placeholder={movieData.runtime ? movieData.runtime : '--'}
               />
             </label>
 

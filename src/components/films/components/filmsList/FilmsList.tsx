@@ -37,16 +37,18 @@ export const FilmsListC = () => {
       <FilmsQ><b>{q}</b> films found</FilmsQ>
       <ContainerRowAlignStart>
         { moviesArr &&
-          moviesArr.map(({id, name, desc, category, year, img}) => {
+          moviesArr.map(({_id, name, desc, category, year, img, runtime}) => {
             // having ts issue here
             return(
               <FilmItemC
-                key={id}
+                key={_id}
+                movieId={_id}
                 name={name}
                 desc={desc}
                 category={category}
                 year={year}
                 img={img}
+                runtime={runtime}
               />
             )
           })

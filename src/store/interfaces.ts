@@ -1,6 +1,6 @@
 export interface IAction {
   type: string,
-  payload: [] | string | {}
+  payload: [] | string | {} | any
 }
 
 export interface IState {
@@ -14,4 +14,14 @@ export interface IFilmPopupVisibility {
   popupsReducer: {
     filmOverview: boolean;
   }
+}
+
+export interface IMovie {
+  movieId: string,
+  name: string,
+  desc: string,
+  category: string,
+  year: number,
+  img: string,
+  runtime: number
 }

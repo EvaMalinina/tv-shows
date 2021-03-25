@@ -2,7 +2,7 @@ const express = require('express');
 const movieModel = require('../models/movie.model');
 const app = express();
 
-app.get('/movies', async (req, res) => {
+app.get('/', async (req, res) => {
   const movies = await movieModel.find({});
 
   try {
@@ -13,7 +13,14 @@ app.get('/movies', async (req, res) => {
 });
 
 app.post('/movie', async (req, res) => {
-  const movie = new movieModel(req.body);
+  const movie = new movieModel({
+    img: req.body.movieUrl,
+    name: req.body.title,
+    desc: req.body.overview,
+    category: req.body.genre.type,
+    year: parseInt(req.body.startDate.substr(-4)),
+    runtime: req.body.runtime
+  });
   const dup = movieModel.findOne({name: req.body.name});
 
   try {

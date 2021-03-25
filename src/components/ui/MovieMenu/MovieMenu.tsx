@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
 import {controlPopupVisibility} from "../../filmPopups/store/actions";
 import {useDispatch} from "react-redux";
+import {getSingleMovieData} from "../../filmPopups/storeMovie/actions";
+import {IMovie} from "../../../store/interfaces";
 
 
-const MovieMenu = () => {
+
+const MovieMenu = ({data}: {data: IMovie}) => {
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const handleClick = (e: { stopPropagation: () => void; }) => {
@@ -17,6 +20,9 @@ const MovieMenu = () => {
     e.stopPropagation();
     dispatch(
       controlPopupVisibility('edit', true)
+    )
+    dispatch(
+        getSingleMovieData(data)
     )
   };
 

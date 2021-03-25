@@ -7,5 +7,3 @@ export const controlPopupVisibility = (modalType, visibility) => ({
     visibility
   }
 });
-
-

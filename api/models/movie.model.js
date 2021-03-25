@@ -11,7 +11,6 @@ const MovieSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true,
-    lowercase: true
   },
   desc: {
     type: String,
@@ -30,7 +29,12 @@ const MovieSchema = new mongoose.Schema({
     validate(value) {
       if (value < 0) throw new Error("Please provide valid year.");
     }
-  }
+  },
+  runtime: {
+    type: Number,
+    required: false,
+    trim: true
+  },
 });
 
 const Movie = mongoose.model("Movie", MovieSchema);
