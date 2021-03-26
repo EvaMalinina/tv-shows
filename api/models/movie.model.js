@@ -1,21 +1,27 @@
 const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const MovieSchema = new mongoose.Schema({
   img: {
     type: String,
     required: true,
     trim: true,
-    lowercase: true
+    lowercase: true,
+    unique: true
   },
   name: {
     type: String,
+    unique: true,
+    index: true,
     required: true,
     trim: true,
+
   },
   desc: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
+    unique: true
   },
   category: {
     type: String,
@@ -32,10 +38,13 @@ const MovieSchema = new mongoose.Schema({
   },
   runtime: {
     type: Number,
-    required: false,
     trim: true
   },
+}, {
+  collection: 'movies'
 });
+
+MovieSchema.plugin(uniqueValidator);
 
 const Movie = mongoose.model("Movie", MovieSchema);
 module.exports = Movie;

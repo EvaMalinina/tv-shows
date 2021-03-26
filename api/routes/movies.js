@@ -21,18 +21,26 @@ app.post('/movie', async (req, res) => {
     year: parseInt(req.body.startDate.substr(-4)),
     runtime: req.body.runtime
   });
-  const dup = movieModel.findOne({name: req.body.name});
 
   try {
-    // this did not work in Postman
-    // if (!dup) {
       await movie.save();
       res.send(movie);
-    // } else {
-    //   console.log('The movie with such name already exist.')
-    // }
   } catch (err) {
-    res.status(500).send(err);
+    if (err.errors.name) {
+      res.status(501).send(err.errors.name.value + ' movie already exist!');
+    }
+
+    else if (err.errors.desc) {
+      res.status(502).send(err.errors.desc.value + ' - such overview already exist. Please no duplicates.');
+    }
+
+    else if (err.errors.img) {
+      res.status(503).send(err.errors.img.value + ' - such poster already exist. Please no duplicates.');
+    }
+
+    else {
+      res.status(500).send(err);
+    }
   }
 });
 

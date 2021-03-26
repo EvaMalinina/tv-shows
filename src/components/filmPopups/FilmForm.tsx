@@ -13,7 +13,6 @@ import { baseUrl } from "../../url";
 import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
 
 
-
 type Option = {
   id: number;
   type: string;
@@ -79,7 +78,12 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
           alert('Congrats! Movie added.')
         })
         .catch((err) => {
-          console.log(err)
+          if (err.response) {
+            alert(err.response.data);
+          } else if (err.request) {
+            // client never received a response, or request never left
+            console.log('Please check internet connection...')
+          }
         })
 
     onClose();
