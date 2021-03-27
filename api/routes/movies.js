@@ -57,7 +57,16 @@ app.delete('/movie/:id', async (req, res) => {
 
 app.patch('/movie/:id', async (req, res) => {
   try {
-    const movie = await movieModel.findByIdAndUpdate(req.params.id, req.body)
+    const movie = await movieModel.findByIdAndUpdate(req.params.id, {
+      img: req.body.movieUrl,
+      name: req.body.title,
+      desc: req.body.overview,
+      category: req.body.genre.type,
+      year: parseInt(req.body.startDate.substr(-4)),
+      runtime: req.body.runtime
+    })
+    if (!movie) return res.status(404).send('The product with the given ID was not found.');
+
     await movieModel.save()
     res.send(movie)
   } catch (err) {

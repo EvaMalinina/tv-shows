@@ -31,6 +31,9 @@ const MovieMenu = ({data}: {data: IMovie}) => {
     dispatch(
         controlPopupVisibility('remove', true)
     )
+    dispatch(
+        getSingleMovieData(data)
+    )
   };
 
   return (

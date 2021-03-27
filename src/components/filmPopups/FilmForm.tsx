@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useRef, useState} from "react";
+import React, {FormEvent, useCallback, useEffect, useRef, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
@@ -11,6 +11,8 @@ import {IFilmPopupVisibility} from "../../store/interfaces";
 import axios from "axios";
 import { baseUrl } from "../../url";
 import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
+import Portal from "../alerts/Portal";
+import Alert from "../alerts/Alert";
 
 
 type Option = {
@@ -25,24 +27,35 @@ const _genreOptions: Option[] = [
   { id: 4, type: 'crime'},
 ];
 
+interface IMovieData {
+  title: string,
+  startDate: string,
+  movieUrl: string,
+  genre: { id: number, type: string},
+  overview: string,
+  runtime: number
+}
 
 const FilmPopup = ({labels, type}: IPopupProps) => {
   const initialEmptyMovieData = {
-    title: '',
-    startDate: '03/24/2021',
-    movieUrl: '',
+    title: ' ',
+    startDate: ' ',
+    movieUrl: ' ',
     genre: { id: 2, type: 'comedy'},
-    overview: '',
-    runtime: ''
+    overview: ' ',
+    runtime: 60
   }
   const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
-  const [newMovieData, setNewMovieData] = useState(initialEmptyMovieData);
+  const [newMovieData, setNewMovieData] = useState<IMovieData>(initialEmptyMovieData);
 
   // having troubles typing props here
   const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility)
 
-  const movieData = useSelector(state => state.singleMovieReducer.movie)
+  const movieData = useSelector(state => state.singleMovieReducer.movie);
 
+  const [ isAlertVisible, setIsAlertVisible ] = useState( false);
+  const [ alertText, setAlertText ] = useState<string>('');
+  const [ alertType, setAlertType ] = useState<string>('');
 
   const dispatch = useDispatch();
   const onClose = () => {
@@ -65,7 +78,22 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
   const resetForm = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    setNewMovieData(initialEmptyMovieData)
+    setNewMovieData({...newMovieData, genre: {id: 0, type: ""}, movieUrl: "", overview: "", runtime: 0, startDate: "", title: ""})
+  };
+
+  const closeForm = () => {
+    if (alertType === 'success') {
+      onClose();
+    }
+  };
+
+  const showAlert = () => {
+    setIsAlertVisible(true);
+    window.setTimeout(() =>  {
+      setIsAlertVisible(false);
+
+      closeForm();
+    }, 3000);
   };
 
   const sendFilmData = (e: { preventDefault: () => void; }) => {
@@ -74,26 +102,67 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     // dispatch(sendNewMovieData());
     axios.post(`${baseUrl}movie`, newMovieData)
         .then((res) => {
+          setAlertType('success');
+          setAlertText('Congrats! Movie added.');
+
+          showAlert();
           dispatch(getMoviesDataStart());
-          alert('Congrats! Movie added.')
+          resetForm(e);
         })
         .catch((err) => {
+          setAlertType('error');
           if (err.response) {
-            alert(err.response.data);
+            setAlertText('Error: '+ err.response.data);
           } else if (err.request) {
             // client never received a response, or request never left
-            console.log('Please check internet connection...')
+            setAlertText('Please check internet connection...');
           }
+          showAlert();
         })
-
-    onClose();
-    resetForm(e);
   };
+
+  const sendUpdateFilmData = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    axios.patch(`${baseUrl}movie/${movieData.movieId}`, newMovieData)
+        .then((res) => {
+          setAlertType('success');
+          setAlertText('Congrats! Movie updated.');
+
+          showAlert();
+          dispatch(getMoviesDataStart());
+          resetForm(e);
+        })
+        .catch((err) => {
+          setAlertType('error');
+          if (err.response) {
+            setAlertText('Error: '+ err.response.data);
+          } else if (err.request) {
+            // client never received a response, or request never left
+            setAlertText('Please check internet connection...');
+          }
+          showAlert();
+        })
+  }
+
+  useEffect(() => {
+    movieData.name ?
+    setNewMovieData({
+      ...newMovieData,
+      title: movieData.name,
+      startDate: movieData.year,
+      movieUrl: movieData.img,
+      genre: movieData.genre,
+      overview: movieData.overview,
+      runtime: movieData.runtime
+    })
+      : null;
+  },[movieData])
 
   useEffect(() => {
     console.log(newMovieData)
-  },[sendFilmData])
+  }, [newMovieData])
 
+  const AlertComponent = () => <Alert text={alertText} type={alertType}/>;
 
   return !!visible && (
     <Bg>
@@ -182,11 +251,23 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
             <BtnsWrapper>
               <BtnReset onClick={resetForm}>Reset</BtnReset>
-              <BtnSubmit onClick={sendFilmData}>{labels.btnSubmit}</BtnSubmit>
+              {
+                type === 'add' ?
+                    <BtnSubmit onClick={(e) => sendFilmData(e)}>{labels.btnSubmit}</BtnSubmit>
+                    :
+                    <BtnSubmit onClick={sendUpdateFilmData}>Update</BtnSubmit>
+              }
             </BtnsWrapper>
           </Form>
         </Container>
       </BgForm>
+
+      {
+        isAlertVisible ?
+            <Portal children={<AlertComponent/>}/>
+          :
+          <></>
+      }
     </Bg>
   )
 }
