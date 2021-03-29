@@ -1,25 +1,25 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import {SEND_NEW_MOVIE_DATA_ERROR, SEND_NEW_MOVIE_DATA_START, SEND_NEW_MOVIE_DATA_SUCCESS} from './types';
+import {SEND_NEW_MOVIE_DATA} from './types';
 import {baseUrl} from "../../../url";
+import {sendNewMovieDataFailure, sendNewMovieDataRequest, sendNewMovieDataSuccess} from "./actions";
+import axios from "axios";
 
 
-function* sendNewMovie() {
+function* sendNewMovie(data:any) {
   try {
-    const res = yield call(fetch, baseUrl+'movie', {
-      method: 'POST',
-    })
-    const data = yield res.json();
-    console.log('data saga', data)
-    yield put({ type: SEND_NEW_MOVIE_DATA_SUCCESS, payload: data });
+    yield put(sendNewMovieDataRequest());
 
+    const movie = yield call(() => axios.post(`${baseUrl}movie`, {...data.payload}));
+
+    yield put(sendNewMovieDataSuccess(movie.data));
   } catch (e) {
-    yield put({type: SEND_NEW_MOVIE_DATA_ERROR, payload: e.message});
+    yield put(sendNewMovieDataFailure(e.message));
   }
 }
 
 
 function* watchSendNewMovie() {
-  yield takeEvery(SEND_NEW_MOVIE_DATA_START, sendNewMovie);
+  yield takeEvery(SEND_NEW_MOVIE_DATA, sendNewMovie);
 }
 
 

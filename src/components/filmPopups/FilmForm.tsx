@@ -13,6 +13,7 @@ import { baseUrl } from "../../url";
 import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
 import Portal from "../alerts/Portal";
 import Alert from "../alerts/Alert";
+import {sendNewMovieData} from "./storeMovie/actions";
 
 
 type Option = {
@@ -55,7 +56,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
   const [ isAlertVisible, setIsAlertVisible ] = useState( false);
   const [ alertText, setAlertText ] = useState<string>('');
-  const [ alertType, setAlertType ] = useState<string>('');
+  const [ alertType, setAlertType ] = useState<string>('initial');
 
   const dispatch = useDispatch();
   const onClose = () => {
@@ -81,44 +82,45 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     setNewMovieData({...newMovieData, genre: {id: 0, type: ""}, movieUrl: "", overview: "", runtime: 0, startDate: "", title: ""})
   };
 
-  const closeForm = () => {
-    if (alertType === 'success') {
-      onClose();
-    }
-  };
 
-  const showAlert = () => {
+
+  const showAlert = (alertType: string) => {
     setIsAlertVisible(true);
     window.setTimeout(() =>  {
       setIsAlertVisible(false);
 
-      closeForm();
+      if (alertType === 'success')  onClose();
+
     }, 3000);
   };
+
 
   const sendFilmData = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    // dispatch(sendNewMovieData());
-    axios.post(`${baseUrl}movie`, newMovieData)
-        .then((res) => {
-          setAlertType('success');
-          setAlertText('Congrats! Movie added.');
+    dispatch(sendNewMovieData(newMovieData));
 
-          showAlert();
-          dispatch(getMoviesDataStart());
-          resetForm(e);
-        })
-        .catch((err) => {
-          setAlertType('error');
-          if (err.response) {
-            setAlertText('Error: '+ err.response.data);
-          } else if (err.request) {
-            // client never received a response, or request never left
-            setAlertText('Please check internet connection...');
-          }
-          showAlert();
-        })
+    dispatch(getMoviesDataStart());
+    // axios.post(`${baseUrl}movie`, newMovieData)
+    //     .then((res) => {
+    //       setAlertType('success');
+    //       setAlertText('Congrats! Movie added.');
+    //
+    //       //pass string 'success' here as state update async
+    //       showAlert('success');
+    //       dispatch(getMoviesDataStart());
+    //       resetForm(e);
+    //     })
+    //     .catch((err) => {
+    //       setAlertType('error');
+    //       if (err.response) {
+    //         setAlertText('Error: '+ err.response.data);
+    //       } else if (err.request) {
+    //         // client never received a response, or request never left
+    //         setAlertText('Please check internet connection...');
+    //       }
+    //       showAlert('error');
+    //     })
   };
 
   const sendUpdateFilmData = (e: { preventDefault: () => void; }) => {
@@ -128,7 +130,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
           setAlertType('success');
           setAlertText('Congrats! Movie updated.');
 
-          showAlert();
+          showAlert('success');
           dispatch(getMoviesDataStart());
           resetForm(e);
         })
@@ -140,7 +142,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
             // client never received a response, or request never left
             setAlertText('Please check internet connection...');
           }
-          showAlert();
+          showAlert('error');
         })
   }
 

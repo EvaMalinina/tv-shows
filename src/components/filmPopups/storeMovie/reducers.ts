@@ -2,8 +2,8 @@ import {IAction, IMovie} from "../../../store/interfaces";
 import {
   GET_MOVIE_DATA_SUCCESS,
   SEND_NEW_MOVIE_DATA_ERROR,
-  SEND_NEW_MOVIE_DATA_START,
-  SEND_NEW_MOVIE_DATA_SUCCESS
+  SEND_NEW_MOVIE_DATA_SUCCESS,
+  SEND_NEW_MOVIE_DATA_REQUEST
 } from "./types";
 
 const initialState = {
@@ -20,7 +20,7 @@ const initialState = {
 
 export default function(state = initialState, action: IAction) {
   switch (action.type) {
-    case SEND_NEW_MOVIE_DATA_START:
+    case SEND_NEW_MOVIE_DATA_REQUEST:
       return {
         ...state,
         isLoading: true

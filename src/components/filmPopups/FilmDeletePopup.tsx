@@ -26,6 +26,7 @@ const FilmDeletePopup = ({type}: IType) => {
 
     axios.delete(`${baseUrl}movie/${movieData.movieId}`)
         .then((res) => {
+          onClose();
           dispatch(getMoviesDataStart());
         })
         .catch((err) => {

@@ -6,16 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMoviesDataStart } from "./store/actions";
 
 export const FilmsListC = () => {
-  const [q, setQ] = useState<number>(1);
+  const [q, setQ] = useState<number>(0);
   const [moviesArr, setMoviesArr] = useState<[] | null>(null);
   const dispatch = useDispatch();
+
+  // not sure about this ..
+  const movies = useSelector(state => state.moviesReducer.movies);
 
   useEffect(() => {
     dispatch(getMoviesDataStart());
   }, []);
-
-  // not sure about this ..
-  const movies = useSelector(state => state.moviesReducer.movies);
 
   useEffect(() => {
     movies && movies.length > 0 ? setMoviesArr(movies) : null;
