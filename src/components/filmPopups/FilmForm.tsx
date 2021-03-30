@@ -86,7 +86,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     e.preventDefault();
     try {
       dispatch(sendNewMovieData(newMovieData));
-      // resetForm(e);
+      resetForm(e);
       dispatch(getMoviesDataStart());
     } catch (e) {
       dispatch(showAlert(e))
@@ -98,8 +98,8 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     try {
       const movieId = movieData.movieId;
       const updatedMovieData = {...newMovieData, movieId};
+
       dispatch(updateMovieData(updatedMovieData));
-      resetForm(e);
       dispatch(getMoviesDataStart());
     } catch (e) {
       dispatch(showAlert(e))
@@ -182,6 +182,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               genre
               <div style={{marginTop: '5px'}}>
                 <SelectC
+                  selectedOption={newMovieData.genre}
                   options={_genreOptions}
                   onHandleChange={(val: string) => handleGenreChange(val)}
                 />

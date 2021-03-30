@@ -4,6 +4,7 @@ import { ContainerColumn, ContainerRowAlignStart } from  '../../../../styles/gen
 import { FilmsQ } from './filmsList.styled';
 import { useDispatch, useSelector } from "react-redux";
 import { getMoviesDataStart } from "./store/actions";
+import {IMovie} from "../../../../store/interfaces";
 
 export const FilmsListC = () => {
   const [q, setQ] = useState<number>(0);
@@ -12,6 +13,8 @@ export const FilmsListC = () => {
 
   // not sure about this ..
   const movies = useSelector(state => state.moviesReducer.movies);
+  const filter = useSelector(state => state.filterReducer.filter);
+  const sortBy = useSelector(state => state.filterReducer.sortBy);
 
   useEffect(() => {
     dispatch(getMoviesDataStart());
@@ -22,7 +25,7 @@ export const FilmsListC = () => {
   }, [movies]);
 
   const getMoviesQ = useCallback(() => {
-   !!moviesArr && moviesArr.length > 0 ? setQ(moviesArr.length) : null;
+   !!moviesArr ? setQ(moviesArr.length) : null;
   }, [moviesArr])
 
 
@@ -30,7 +33,33 @@ export const FilmsListC = () => {
     getMoviesQ();
   }, [moviesArr])
 
+  useEffect(() => {
+    if (filter && filter.length > 0) {
+      const filteredArr = movies.filter((el: IMovie) => el.category === filter);
+      setMoviesArr(filteredArr);
 
+      if (filter === 'all') {
+        setMoviesArr(movies);
+      }
+    }
+  }, [filter]);
+
+  Array.prototype.sortByF = function(p) {
+    return this.slice(0).sort(function(a,b) {
+      return (a[p] > b[p]) ? 1 : (a[p] < b[p]) ? -1 : 0;
+    });
+  }
+
+  useEffect(() => {
+
+    if (sortBy && sortBy === 'release date') {
+      const sortedArr = movies.sortByF('year')
+      setMoviesArr(sortedArr);
+    } else {
+      const sortedArr = movies.sortByF('name')
+      setMoviesArr(sortedArr);
+    }
+  }, [sortBy]);
 
   return (
     <ContainerColumn>

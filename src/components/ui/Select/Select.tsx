@@ -9,24 +9,25 @@ type Option = {
 };
 
 interface Props {
-  options: Option[];
-  onHandleChange: Function;
+  options: Option[],
+  onHandleChange: Function,
+  selectedOption: string
 }
 
 
-const SelectC = ({options, onHandleChange}: Props) => {
+const SelectC = ({options, onHandleChange, selectedOption}: Props) => {
 
-  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
+  const [defaultOption, setDefaultOption] = useState<Option | null>(null);
 
-  const pickOption = (selectedOption: Option) => {
-    setSelectedOption(selectedOption)
-    onHandleChange(selectedOption?.value)
+  const pickOption = (defaultOption: Option) => {
+    setDefaultOption(defaultOption)
+    onHandleChange(defaultOption?.value)
   }
 
   return (
       <Select
           options={options}
-          value={selectedOption}
+          value={{ value: selectedOption, label: selectedOption}}
           onChange={pickOption}
           styles={colourSelectStyles}
           isClearable={false}

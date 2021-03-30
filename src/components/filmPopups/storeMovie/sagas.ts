@@ -56,13 +56,10 @@ function* updateMovie(data:any) {
   try {
     const { movieId, ...updatedMovie } = data.payload;
     yield put(updateMovieDataRequest());
-    console.log('movieId', movieId)
-    console.log('updatedMovie', updatedMovie)
     const res = yield call(() => axios.patch(`${baseUrl}movie/${movieId}`, updatedMovie));
 
-    console.log('data', res)
     yield put(updateMovieDataSuccess(res.data));
-    yield put(showAlert({text: `Movie successfully updated!`, type: 'success'}))
+    yield put(showAlert({text: `Movie ${res.data.name} successfully updated!`, type: 'success'}))
   } catch (e) {
     yield put(updateMovieDataFailure(e.message));
     yield put(showAlert({text: e.response.data, type: 'error'}))

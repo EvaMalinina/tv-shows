@@ -1,6 +1,7 @@
-import { call, put, takeEvery, delay } from 'redux-saga/effects';
-import { GET_MOVIES_ERROR, GET_MOVIES_START, GET_MOVIES_SUCCESS } from './types';
-import { baseUrl } from "../../../../../url";
+import {call, put, takeEvery, delay} from 'redux-saga/effects';
+import {GET_MOVIES_START} from './types';
+import {baseUrl} from "../../../../../url";
+import {getMoviesDataFailure, getMoviesDataSuccess} from "./actions";
 
 
 function* fetchMovies() {
@@ -8,10 +9,10 @@ function* fetchMovies() {
     yield delay(1000);
     const res = yield call(fetch, baseUrl);
     const data = yield res.json();
-    yield put({ type: GET_MOVIES_SUCCESS, payload: data });
+    yield put(getMoviesDataSuccess(data));
 
   } catch (e) {
-    yield put({type: GET_MOVIES_ERROR, payload: e.message});
+    yield put(getMoviesDataFailure(e.message));
   }
 }
 

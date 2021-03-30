@@ -67,25 +67,24 @@ app.patch('/movie/:id', async (req, res) => {
     })
     if (!movie) return res.status(404).send('The product with the given ID was not found.');
 
-    await movieModel.save()
+    await movie.save()
     res.send(movie)
   } catch (err) {
-    console.log(err)
-    // if (err.errors.name) {
-    //   res.status(501).send(err.errors.name.value + ' movie already exist!');
-    // }
-    //
-    // else if (err.errors.desc) {
-    //   res.status(502).send(err.errors.desc.value + ' - such overview already exist. Please no duplicates.');
-    // }
-    //
-    // else if (err.errors.img) {
-    //   res.status(503).send(err.errors.img.value + ' - such poster already exist. Please no duplicates.');
-    // }
-    //
-    // else {
-    //   res.status(500).send(err);
-    // }
+    if (err.keyValue && err.keyValue.name) {
+      res.status(501).send(err.keyValue.name + ' movie already exist!');
+    }
+
+    else if (err.keyValue && err.keyValue.desc) {
+      res.status(502).send(err.keyValue.desc + ' - such overview already exist. Please no duplicates.');
+    }
+
+    else if (err.keyValue && err.keyValue.img) {
+      res.status(503).send(err.keyValue.img + ' - such poster already exist. Please no duplicates.');
+    }
+
+    else {
+      res.status(500).send(err);
+    }
   }
 })
 

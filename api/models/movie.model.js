@@ -30,7 +30,7 @@ const MovieSchema = new mongoose.Schema({
     lowercase: true
   },
   year: {
-    type: Number,
+    type: String,
     default: 2000,
     validate(value) {
       if (value < 0) throw new Error("Please provide valid year.");

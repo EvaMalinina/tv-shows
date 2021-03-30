@@ -51,8 +51,8 @@ export default function(state = initialState, action: IAction) {
         movie: {
           movieId: action.payload.movieId,
           name: action.payload.name,
-          desc: action.payload.desc,
-          category: action.payload.category,
+          overview: action.payload.desc,
+          genre: action.payload.category,
           year: action.payload.year,
           img: action.payload.img,
           runtime: action.payload.runtime
