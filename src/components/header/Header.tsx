@@ -19,7 +19,7 @@ import Logo from "../ui/Logo/Logo";
 import FilmOverview from "../filmPopups/filmOverview";
 import {ILabel} from "../home/Home";
 import {useDispatch, useSelector} from "react-redux";
-import {controlPopupVisibility} from "../filmPopups/store/actions";
+import {controlPopupVisibility} from "../filmPopups/storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
 
 interface IMovie {

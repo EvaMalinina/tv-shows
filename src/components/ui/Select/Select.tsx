@@ -1,13 +1,12 @@
-import React, {useCallback} from 'react';
-import { Select } from 'react-functional-select';
-import { theme } from "../../../styles/theme";
-import { SelectWrapper } from './select.styled';
+import React, {useState} from 'react';
+import {colourSelectStyles} from "../../../styles/theme";
+import Select from 'react-select'
+
 
 type Option = {
-  id: number;
-  type: string;
+  value: string;
+  label: string;
 };
-
 
 interface Props {
   options: Option[];
@@ -16,22 +15,31 @@ interface Props {
 
 
 const SelectC = ({options, onHandleChange}: Props) => {
-  // const [ selectedOption, setSelectedOption] = useState<Option | null>({ id: 1, type: 'release date'});
 
-  const getOptionValue = useCallback((option: Option): number => option.id, []);
-  const onOptionChange = useCallback((option: Option | null): void => onHandleChange(option), []);
-  const getOptionLabel = useCallback((option: Option): string => `${option.type}`, []);
+  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
 
-  return(
-    <SelectWrapper>
+  const pickOption = (selectedOption: Option) => {
+    setSelectedOption(selectedOption)
+    onHandleChange(selectedOption?.value)
+  }
+
+  return (
       <Select
-        options={options}
-        onOptionChange={onOptionChange}
-        getOptionValue={getOptionValue}
-        getOptionLabel={getOptionLabel}
-        themeConfig={theme}
+          options={options}
+          value={selectedOption}
+          onChange={pickOption}
+          styles={colourSelectStyles}
+          isClearable={false}
+          isSearchable={false}
+          theme={theme => ({
+            ...theme,
+            colors: {
+              ...theme.colors,
+              primary: "#424242",
+              primary25: 'hotpink',
+            },
+          })}
       />
-    </SelectWrapper>
   )
 }
 

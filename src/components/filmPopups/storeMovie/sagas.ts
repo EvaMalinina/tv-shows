@@ -1,19 +1,28 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import {SEND_NEW_MOVIE_DATA} from './types';
+import {DELETE_MOVIE_DATA, SEND_NEW_MOVIE_DATA, UPDATE_MOVIE_DATA} from './types';
 import {baseUrl} from "../../../url";
-import {sendNewMovieDataFailure, sendNewMovieDataRequest, sendNewMovieDataSuccess} from "./actions";
+import {
+  deleteMovieDataFailure,
+  deleteMovieDataRequest, deleteMovieDataSuccess,
+  sendNewMovieDataFailure,
+  sendNewMovieDataRequest,
+  sendNewMovieDataSuccess, updateMovieDataFailure, updateMovieDataRequest, updateMovieDataSuccess
+} from "./actions";
 import axios from "axios";
+import { showAlert } from '../storeAlerts/actions';
 
 
 function* sendNewMovie(data:any) {
   try {
     yield put(sendNewMovieDataRequest());
+    const res = yield call(() => axios.post(`${baseUrl}movie`, {...data.payload}));
+    yield put(sendNewMovieDataSuccess(res.data));
 
-    const movie = yield call(() => axios.post(`${baseUrl}movie`, {...data.payload}));
+    yield put(showAlert({text: `${res.data.name} successfully added!`, type: 'success'}))
 
-    yield put(sendNewMovieDataSuccess(movie.data));
   } catch (e) {
-    yield put(sendNewMovieDataFailure(e.message));
+    yield put(sendNewMovieDataFailure(e.response.data));
+    yield put(showAlert({text: e.response.data, type: 'error'}))
   }
 }
 
@@ -24,3 +33,43 @@ function* watchSendNewMovie() {
 
 
 export default watchSendNewMovie;
+
+function* deleteMovie(data:any) {
+  try {
+    yield put(deleteMovieDataRequest());
+
+    const movieId = data.payload;
+    yield call(() => axios.delete(`${baseUrl}movie/${movieId}`));
+
+    yield put(deleteMovieDataSuccess());
+  } catch (e) {
+    yield put(deleteMovieDataFailure(e.message));
+  }
+}
+
+
+export function* watchDeleteMovie() {
+  yield takeEvery(DELETE_MOVIE_DATA, deleteMovie);
+}
+
+function* updateMovie(data:any) {
+  try {
+    const { movieId, ...updatedMovie } = data.payload;
+    yield put(updateMovieDataRequest());
+    console.log('movieId', movieId)
+    console.log('updatedMovie', updatedMovie)
+    const res = yield call(() => axios.patch(`${baseUrl}movie/${movieId}`, updatedMovie));
+
+    console.log('data', res)
+    yield put(updateMovieDataSuccess(res.data));
+    yield put(showAlert({text: `Movie successfully updated!`, type: 'success'}))
+  } catch (e) {
+    yield put(updateMovieDataFailure(e.message));
+    yield put(showAlert({text: e.response.data, type: 'error'}))
+  }
+}
+
+
+export function* watchUpdateMovie() {
+  yield takeEvery(UPDATE_MOVIE_DATA, updateMovie);
+}

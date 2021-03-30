@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
-import {controlPopupVisibility} from "../../filmPopups/store/actions";
+import {controlPopupVisibility} from "../../filmPopups/storePopups/actions";
 import {useDispatch} from "react-redux";
 import {getSingleMovieData} from "../../filmPopups/storeMovie/actions";
 import {IMovie} from "../../../store/interfaces";

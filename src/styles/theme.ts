@@ -12,27 +12,30 @@ export const theme = {
   $smokyWhite: '#cdcdcd',
 
   mobile: '380px',
-
-  // react-functional-select styling
-  color: {
-    border: "transparent",
-    primary: "#232323",
-    placeholder: '#a2a2a2',
-  },
-  control: {
-    boxShadowColor: "#555",
-    focusedBorderColor: "rgba(85, 85, 85, 0.75)"
-  },
-  icon: {
-    color: "#555"
-  },
-  menu: {
-    backgroundColor: "#232323",
-    option: {
-      color:'#a2a2a2',
-      selectedColor: "#fff",
-      selectedBgColor: "#424242",
-      focusedBgColor: "#424242"
-    }
-  }
 }
+
+export const colourSelectStyles = {
+  control: (styles: any) => (
+      {...styles, backgroundColor: "#232323", color: "#232323"}
+  ),
+  singleValue: (styles: any) => ({...styles, color: 'white'}),
+  valueContainer: (provided: any) => ({
+    ...provided,
+    height: "26px",
+    padding: '0 10px',
+  }),
+  placeholder: (styles: any) => ({...styles, color: 'white'}),
+
+  option: (provided: any, state: any) => ({
+    ...provided,
+    color: 'white',
+    padding: '10px',
+    backgroundColor: state.isFocused ? "#555" : "#232323",
+    margin: 0
+  }),
+  menuList: (provided: any) => ({
+    ...provided,
+    paddingTop: 0,
+    paddingBottom: 0,
+  }),
+};

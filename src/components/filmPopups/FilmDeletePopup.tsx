@@ -1,13 +1,13 @@
-import React, {useState} from "react";
+import React from "react";
 import {Bg, BgForm, Form, BtnPopupClose, BtnSubmit} from "./filmPopups.styled";
 import {Container} from "../../styles/general";
 import {IType} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
-import {controlPopupVisibility} from "./store/actions";
+import {controlPopupVisibility} from "./storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
-import axios from "axios";
-import {baseUrl} from "../../url";
 import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
+import {deleteMovieData} from "./storeMovie/actions";
+import {showAlert} from "./storeAlerts/actions";
 
 
 const FilmDeletePopup = ({type}: IType) => {
@@ -24,16 +24,13 @@ const FilmDeletePopup = ({type}: IType) => {
   const deleteFilm = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    axios.delete(`${baseUrl}movie/${movieData.movieId}`)
-        .then((res) => {
-          onClose();
-          dispatch(getMoviesDataStart());
-        })
-        .catch((err) => {
-          if (err.response) {
-            alert('Error: '+ err.response.data);
-          }
-        })
+    try {
+      dispatch(deleteMovieData(movieData.movieId));
+      onClose();
+      dispatch(getMoviesDataStart());
+    } catch (e) {
+      dispatch(showAlert(e.response.data))
+    }
   };
 
   return !!visible && (

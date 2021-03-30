@@ -3,7 +3,7 @@ import { ContainerColumn } from "../../../../styles/general";
 import { Movie } from "./filmsList.styled";
 import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
 import {useDispatch} from "react-redux";
-import {controlPopupVisibility} from "../../../filmPopups/store/actions";
+import {controlPopupVisibility} from "../../../filmPopups/storePopups/actions";
 import {IMovie} from "../../../../store/interfaces";
 
 

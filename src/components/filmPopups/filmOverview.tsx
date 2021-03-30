@@ -11,7 +11,7 @@ import {
 import {Container, ContainerColumn, ContainerRow, ContainerRowAlignStart} from "../../styles/general";
 import {IPopupProps} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
-import {controlPopupVisibility} from "./store/actions";
+import {controlPopupVisibility} from "./storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
 
 

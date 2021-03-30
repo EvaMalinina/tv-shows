@@ -1,4 +1,4 @@
-import React, {FormEvent, useCallback, useEffect, useRef, useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
@@ -6,33 +6,33 @@ import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } fro
 import SelectC from "../ui/Select/Select";
 import {IPopupProps} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
-import {controlPopupVisibility} from "./store/actions";
+import {controlPopupVisibility} from "./storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
-import axios from "axios";
-import { baseUrl } from "../../url";
 import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
 import Portal from "../alerts/Portal";
 import Alert from "../alerts/Alert";
-import {sendNewMovieData} from "./storeMovie/actions";
+import {sendNewMovieData, updateMovieData} from "./storeMovie/actions";
+import {showAlert} from "./storeAlerts/actions";
 
 
 type Option = {
-  id: number;
-  type: string;
+  value: string;
+  label: string;
 };
 
 const _genreOptions: Option[] = [
-  { id: 1, type: 'documentary'},
-  { id: 2, type: 'comedy'},
-  { id: 3, type: 'horror'},
-  { id: 4, type: 'crime'},
-];
+  { value: 'documentary', label: 'documentary' },
+  { value: 'comedy', label: 'comedy' },
+  { value: 'horror', label: 'horror' },
+  { value: 'crime', label: 'crime' }
+]
+
 
 interface IMovieData {
   title: string,
   startDate: string,
   movieUrl: string,
-  genre: { id: number, type: string},
+  genre: string,
   overview: string,
   runtime: number
 }
@@ -42,7 +42,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     title: ' ',
     startDate: ' ',
     movieUrl: ' ',
-    genre: { id: 2, type: 'comedy'},
+    genre: ' ',
     overview: ' ',
     runtime: 60
   }
@@ -54,9 +54,8 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
   const movieData = useSelector(state => state.singleMovieReducer.movie);
 
-  const [ isAlertVisible, setIsAlertVisible ] = useState( false);
-  const [ alertText, setAlertText ] = useState<string>('');
-  const [ alertType, setAlertType ] = useState<string>('initial');
+  const notification = useSelector(state => state.alertsReducer)
+
 
   const dispatch = useDispatch();
   const onClose = () => {
@@ -68,7 +67,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     setNewMovieData({...newMovieData, [name]: value });
   }
 
-  const handleGenreChange = (value: Option) => {
+  const handleGenreChange = (value: string) => {
     setNewMovieData({...newMovieData, genre: value });
   }
 
@@ -79,71 +78,32 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
   const resetForm = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    setNewMovieData({...newMovieData, genre: {id: 0, type: ""}, movieUrl: "", overview: "", runtime: 0, startDate: "", title: ""})
-  };
-
-
-
-  const showAlert = (alertType: string) => {
-    setIsAlertVisible(true);
-    window.setTimeout(() =>  {
-      setIsAlertVisible(false);
-
-      if (alertType === 'success')  onClose();
-
-    }, 3000);
-  };
+    setNewMovieData(initialEmptyMovieData);
+  }
 
 
   const sendFilmData = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-
-    dispatch(sendNewMovieData(newMovieData));
-
-    dispatch(getMoviesDataStart());
-    // axios.post(`${baseUrl}movie`, newMovieData)
-    //     .then((res) => {
-    //       setAlertType('success');
-    //       setAlertText('Congrats! Movie added.');
-    //
-    //       //pass string 'success' here as state update async
-    //       showAlert('success');
-    //       dispatch(getMoviesDataStart());
-    //       resetForm(e);
-    //     })
-    //     .catch((err) => {
-    //       setAlertType('error');
-    //       if (err.response) {
-    //         setAlertText('Error: '+ err.response.data);
-    //       } else if (err.request) {
-    //         // client never received a response, or request never left
-    //         setAlertText('Please check internet connection...');
-    //       }
-    //       showAlert('error');
-    //     })
+    try {
+      dispatch(sendNewMovieData(newMovieData));
+      // resetForm(e);
+      dispatch(getMoviesDataStart());
+    } catch (e) {
+      dispatch(showAlert(e))
+    }
   };
 
   const sendUpdateFilmData = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-    axios.patch(`${baseUrl}movie/${movieData.movieId}`, newMovieData)
-        .then((res) => {
-          setAlertType('success');
-          setAlertText('Congrats! Movie updated.');
-
-          showAlert('success');
-          dispatch(getMoviesDataStart());
-          resetForm(e);
-        })
-        .catch((err) => {
-          setAlertType('error');
-          if (err.response) {
-            setAlertText('Error: '+ err.response.data);
-          } else if (err.request) {
-            // client never received a response, or request never left
-            setAlertText('Please check internet connection...');
-          }
-          showAlert('error');
-        })
+    try {
+      const movieId = movieData.movieId;
+      const updatedMovieData = {...newMovieData, movieId};
+      dispatch(updateMovieData(updatedMovieData));
+      resetForm(e);
+      dispatch(getMoviesDataStart());
+    } catch (e) {
+      dispatch(showAlert(e))
+    }
   }
 
   useEffect(() => {
@@ -164,7 +124,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     console.log(newMovieData)
   }, [newMovieData])
 
-  const AlertComponent = () => <Alert text={alertText} type={alertType}/>;
+  const AlertComponent = () => <Alert text={notification.alertText} type={notification.alertType}/>;
 
   return !!visible && (
     <Bg>
@@ -220,13 +180,12 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
 
             <label htmlFor="genre">
               genre
-              {/*need to stopPropagation, can't resolve*/}
-              {/*<div onMouseDown={e => e.stopPropagation()}>*/}
+              <div style={{marginTop: '5px'}}>
                 <SelectC
                   options={_genreOptions}
-                  onHandleChange={(val: Option) => handleGenreChange(val)}
+                  onHandleChange={(val: string) => handleGenreChange(val)}
                 />
-              {/*</div>*/}
+              </div>
             </label>
 
             <label htmlFor="overview">
@@ -265,7 +224,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
       </BgForm>
 
       {
-        isAlertVisible ?
+        notification.alertIsVisible ?
             <Portal children={<AlertComponent/>}/>
           :
           <></>
