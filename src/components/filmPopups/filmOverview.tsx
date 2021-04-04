@@ -9,15 +9,18 @@ import {
   Subtitle
 } from "./filmPopups.styled";
 import {Container, ContainerColumn, ContainerRow, ContainerRowAlignStart} from "../../styles/general";
-import {actionControlVisibility, useDispatch, useSelector} from "../../context/modalMovieContext";
 import {IPopupProps} from "./interfaces";
+import {useDispatch, useSelector} from "react-redux";
+import {controlPopupVisibility} from "./storePopups/actions";
+import {IFilmPopupVisibility} from "../../store/interfaces";
 
 
 const FilmOverview = ({labels, type}: IPopupProps) => {
 
-  const visible = useSelector(({[type]: visibility}) => visibility),
-      dispatch = useDispatch(),
-      onClose = () => dispatch(actionControlVisibility(type, false))
+  const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility)
+
+  const dispatch = useDispatch();
+  const onClose = () => dispatch(controlPopupVisibility(type, false));
 
   return visible && (
       <FilmOverviewPopup>

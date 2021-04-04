@@ -1,0 +1,2 @@
+export const SET_FILTER_MOVIES = 'SET_FILTER_MOVIES';
+export const SET_SORT_MOVIES = 'SET_SORT_MOVIES';

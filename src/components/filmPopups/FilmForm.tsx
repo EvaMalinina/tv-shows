@@ -1,50 +1,137 @@
-import React, {useState} from "react";
+import React, {FormEvent, useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
 import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
-import {
-  actionControlVisibility,
-  useDispatch,
-  useSelector
-} from "../../context/modalMovieContext";
 import {IPopupProps} from "./interfaces";
+import {useDispatch, useSelector} from "react-redux";
+import {controlPopupVisibility} from "./storePopups/actions";
+import {IFilmPopupVisibility} from "../../store/interfaces";
+import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
+import Portal from "../alerts/Portal";
+import Alert from "../alerts/Alert";
+import {sendNewMovieData, updateMovieData} from "./storeMovie/actions";
+import {showAlert} from "./storeAlerts/actions";
 
 
-type Option = {
-  id: number;
-  type: string;
-};
+enum Genre {
+  DOCUMENTARY = 'documentary',
+  COMEDY = 'comedy',
+  HORROR = 'horror',
+  CRIME = 'crime'
+}
 
-const _genreOptions: Option[] = [
-  { id: 1, type: 'documentary'},
-  { id: 2, type: 'comedy'},
-  { id: 3, type: 'horror'},
-  { id: 3, type: 'crime'},
-];
+type Option = Record<'value' | 'label', Genre>
 
+const _genreOptions: Option[] = Object
+    .values(Genre)
+    .map(value => ({value, label: value}))
+
+
+interface IMovieData {
+  title: string,
+  startDate: string,
+  movieUrl: string,
+  genre: string,
+  overview: string,
+  runtime: number
+}
 
 const FilmPopup = ({labels, type}: IPopupProps) => {
+  const initialEmptyMovieData = {
+    title: ' ',
+    startDate: ' ',
+    movieUrl: ' ',
+    genre: ' ',
+    overview: ' ',
+    runtime: 60
+  }
+  const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
+  const [newMovieData, setNewMovieData] = useState<IMovieData>(initialEmptyMovieData);
 
   // having troubles typing props here
-  const visible = useSelector(({[type]: visibility}) => visibility),
-        dispatch = useDispatch(),
-        onClose = () => dispatch(actionControlVisibility(type, false))
+  const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility);
+  const editPopupVisible = useSelector(({popupsReducer: {['edit']: visibility}}: IFilmPopupVisibility) => visibility)
 
-  const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
+  const movieData = useSelector(state => state.singleMovieReducer.movie);
 
+  const notification = useSelector(state => state.alertsReducer);
+
+
+  const dispatch = useDispatch();
+  const onClose = () => {
+    dispatch(controlPopupVisibility(type, false));
+  }
+
+  const handleChange = (e: FormEvent) => {
+    let { name, value } = e.target;
+    setNewMovieData({...newMovieData, [name]: value });
+  }
+
+  const handleGenreChange = (value: string) => {
+    setNewMovieData({...newMovieData, genre: value });
+  }
+
+  const handleDateChange = (value: Date) => {
+    setStartDate(value);
+    setNewMovieData({...newMovieData, startDate: value.toLocaleDateString() });
+  }
 
   const resetForm = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
-  };
+    setNewMovieData(initialEmptyMovieData);
+  }
+
 
   const sendFilmData = (e: { preventDefault: () => void; }) => {
-    //send data
     e.preventDefault();
-    onClose();
+    try {
+      dispatch(sendNewMovieData(newMovieData));
+      resetForm(e);
+      dispatch(getMoviesDataStart());
+    } catch (e) {
+      dispatch(showAlert(e))
+    }
   };
 
+  const sendUpdateFilmData = (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try {
+      const movieId = movieData.movieId;
+      const updatedMovieData = {...newMovieData, movieId};
+
+      dispatch(updateMovieData(updatedMovieData));
+      dispatch(getMoviesDataStart());
+    } catch (e) {
+      dispatch(showAlert(e))
+    }
+  }
+
+  useEffect(() => {
+    movieData.name && editPopupVisible ?
+    setNewMovieData({
+      ...newMovieData,
+      title: movieData.name,
+      startDate: movieData.year,
+      movieUrl: movieData.img,
+      genre: movieData.genre,
+      overview: movieData.overview,
+      runtime: movieData.runtime
+    })
+      : null;
+
+    if (!editPopupVisible) {
+      setNewMovieData(initialEmptyMovieData);
+    }
+  },[editPopupVisible])
+
+
+  useEffect(() => {
+    console.log(newMovieData)
+  }, [newMovieData])
+
+  const AlertComponent = () => <Alert text={notification.alertText} type={notification.alertType}/>;
 
   return !!visible && (
     <Bg>
@@ -60,14 +147,19 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                 <>
                   <label htmlFor="movieId">
                     Movie Id
-                    <input id="movieId" placeholder="pdb6fshan" readOnly={true}/>
+                    <input id="movieId" placeholder={movieData.movieId} readOnly={true}/>
                   </label>
                 </>
             }
 
             <label htmlFor="title">
               Title
-              <input id="title" placeholder={labels.title}/>
+              <input
+                  id="title"
+                  name="title"
+                  value={newMovieData.title}
+                  onChange={handleChange}
+              />
             </label>
 
             <label htmlFor="date">
@@ -76,40 +168,71 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <DatePicker
                 id="date"
                 selected={startDate}
-                placeholderText={labels.date}
-                onChange={date => setStartDate(date)}
+                onChange={(date: Date) => handleDateChange(date)}
+                placeholderText={movieData.year}
               />
             </label>
 
             <label htmlFor="movie-url">
               movie url
-              <input id="movie-url" placeholder={labels.url}/>
+              <input
+                  id="movie-url"
+                  name="movieUrl"
+                  value={newMovieData.movieUrl}
+                  onChange={handleChange}
+              />
             </label>
 
             <label htmlFor="genre">
               genre
-              <SelectC
-                options={_genreOptions}
-              />
+              <div style={{marginTop: '5px'}}>
+                <SelectC
+                  selectedOption={newMovieData.genre}
+                  options={_genreOptions}
+                  onHandleChange={(val: string) => handleGenreChange(val)}
+                />
+              </div>
             </label>
 
             <label htmlFor="overview">
               Overview
-              <input id="overview" placeholder={labels.overview}/>
+              <input
+                  id="overview"
+                  name="overview"
+                  value={newMovieData.overview}
+                  onChange={handleChange}
+              />
             </label>
 
             <label htmlFor="runtime">
               Runtime
-              <input id="runtime" placeholder={labels.runtime}/>
+              <input
+                  id="runtime"
+                  name="runtime"
+                  value={newMovieData.runtime ? newMovieData.runtime : '--'}
+                  onChange={handleChange}
+              />
             </label>
 
             <BtnsWrapper>
               <BtnReset onClick={resetForm}>Reset</BtnReset>
-              <BtnSubmit onClick={sendFilmData}>{labels.btnSubmit}</BtnSubmit>
+              {
+                type === 'add' ?
+                    <BtnSubmit onClick={(e) => sendFilmData(e)}>{labels.btnSubmit}</BtnSubmit>
+                    :
+                    <BtnSubmit onClick={sendUpdateFilmData}>Update</BtnSubmit>
+              }
             </BtnsWrapper>
           </Form>
         </Container>
       </BgForm>
+
+      {
+        notification.alertIsVisible ?
+            <Portal children={<AlertComponent/>}/>
+          :
+          <></>
+      }
     </Bg>
   )
 }

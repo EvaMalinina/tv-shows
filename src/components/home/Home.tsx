@@ -5,7 +5,6 @@ import Footer from "../footer/Footer";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Logo from "../ui/Logo/Logo";
 import {SuspenseWrapper} from "../../styles/general";
-import {DialogProvider} from "../../context/modalMovieContext";
 
 // this error disappear if I export components as React.FC, bit then new errors appear
 const FilmPopup =  React.lazy(() => import(`../filmPopups/FilmForm`));
@@ -49,21 +48,19 @@ const Home = () => {
 
   return (
     <>
-      <DialogProvider>
-        <ErrorBoundary>
-          <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
-            <FilmPopup labels={labelOptionsAdd} type="add" />
-            <FilmPopup labels={labelOptionsEdit} type="edit" />
-            <FilmDeletePopup type="remove"/>
-          </React.Suspense>
+      <ErrorBoundary>
+        <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
+          <FilmPopup labels={labelOptionsAdd} type="add" />
+          <FilmPopup labels={labelOptionsEdit} type="edit" />
+          <FilmDeletePopup type="remove"/>
+        </React.Suspense>
 
-          <Header/>
-          <Films/>
-          <Footer>
-            <Logo/>
-          </Footer>
-        </ErrorBoundary>
-      </DialogProvider>
+        <Header/>
+        <Films/>
+        <Footer>
+          <Logo/>
+        </Footer>
+      </ErrorBoundary>
     </>
   )
 };

@@ -1,22 +1,36 @@
 import React from "react";
 import {Bg, BgForm, Form, BtnPopupClose, BtnSubmit} from "./filmPopups.styled";
 import {Container} from "../../styles/general";
-import {actionControlVisibility, useDispatch, useSelector} from "../../context/modalMovieContext";
 import {IType} from "./interfaces";
+import {useDispatch, useSelector} from "react-redux";
+import {controlPopupVisibility} from "./storePopups/actions";
+import {IFilmPopupVisibility} from "../../store/interfaces";
+import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
+import {deleteMovieData} from "./storeMovie/actions";
+import {showAlert} from "./storeAlerts/actions";
 
 
 const FilmDeletePopup = ({type}: IType) => {
 
   // having troubles typing props here
-  const visible = useSelector(({[type]: visibility}) => visibility),
-      dispatch = useDispatch(),
-      onClose = () => dispatch(actionControlVisibility(type, false))
+  const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility);
+
+  const dispatch = useDispatch();
+  const onClose = () => dispatch(controlPopupVisibility(type, false));
+
+  const movieData = useSelector(state => state.singleMovieReducer.movie);
 
 
   const deleteFilm = (e: { preventDefault: () => void; }) => {
-    //send delete request
     e.preventDefault();
-    onClose()
+
+    try {
+      dispatch(deleteMovieData(movieData.movieId));
+      onClose();
+      dispatch(getMoviesDataStart());
+    } catch (e) {
+      dispatch(showAlert(e.response.data))
+    }
   };
 
   return !!visible && (
