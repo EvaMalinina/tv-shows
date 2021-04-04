@@ -10,12 +10,16 @@ import {
 } from "./actions";
 import axios from "axios";
 import { showAlert } from '../storeAlerts/actions';
+import {IMovie} from "../../../store/interfaces";
 
+interface res {
+  data: IMovie
+}
 
 function* sendNewMovie(data:any) {
   try {
     yield put(sendNewMovieDataRequest());
-    const res = yield call(() => axios.post(`${baseUrl}movie`, {...data.payload}));
+    const res: res = yield call(() => axios.post(`${baseUrl}movie`, {...data.payload}));
     yield put(sendNewMovieDataSuccess(res.data));
 
     yield put(showAlert({text: `${res.data.name} successfully added!`, type: 'success'}))
@@ -56,7 +60,7 @@ function* updateMovie(data:any) {
   try {
     const { movieId, ...updatedMovie } = data.payload;
     yield put(updateMovieDataRequest());
-    const res = yield call(() => axios.patch(`${baseUrl}movie/${movieId}`, updatedMovie));
+    const res: res = yield call(() => axios.patch(`${baseUrl}movie/${movieId}`, updatedMovie));
 
     yield put(updateMovieDataSuccess(res.data));
     yield put(showAlert({text: `Movie ${res.data.name} successfully updated!`, type: 'success'}))

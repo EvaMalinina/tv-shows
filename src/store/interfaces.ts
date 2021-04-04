@@ -13,6 +13,9 @@ export interface IState {
 export interface IFilmPopupVisibility {
   popupsReducer: {
     filmOverview: boolean;
+    add: boolean;
+    edit: boolean;
+    remove: boolean;
   }
 }
 

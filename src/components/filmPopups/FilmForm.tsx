@@ -15,17 +15,18 @@ import {sendNewMovieData, updateMovieData} from "./storeMovie/actions";
 import {showAlert} from "./storeAlerts/actions";
 
 
-type Option = {
-  value: string;
-  label: string;
-};
+enum Genre {
+  DOCUMENTARY = 'documentary',
+  COMEDY = 'comedy',
+  HORROR = 'horror',
+  CRIME = 'crime'
+}
 
-const _genreOptions: Option[] = [
-  { value: 'documentary', label: 'documentary' },
-  { value: 'comedy', label: 'comedy' },
-  { value: 'horror', label: 'horror' },
-  { value: 'crime', label: 'crime' }
-]
+type Option = Record<'value' | 'label', Genre>
+
+const _genreOptions: Option[] = Object
+    .values(Genre)
+    .map(value => ({value, label: value}))
 
 
 interface IMovieData {
@@ -50,11 +51,12 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
   const [newMovieData, setNewMovieData] = useState<IMovieData>(initialEmptyMovieData);
 
   // having troubles typing props here
-  const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility)
+  const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility);
+  const editPopupVisible = useSelector(({popupsReducer: {['edit']: visibility}}: IFilmPopupVisibility) => visibility)
 
   const movieData = useSelector(state => state.singleMovieReducer.movie);
 
-  const notification = useSelector(state => state.alertsReducer)
+  const notification = useSelector(state => state.alertsReducer);
 
 
   const dispatch = useDispatch();
@@ -107,7 +109,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
   }
 
   useEffect(() => {
-    movieData.name ?
+    movieData.name && editPopupVisible ?
     setNewMovieData({
       ...newMovieData,
       title: movieData.name,
@@ -118,7 +120,12 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
       runtime: movieData.runtime
     })
       : null;
-  },[movieData])
+
+    if (!editPopupVisible) {
+      setNewMovieData(initialEmptyMovieData);
+    }
+  },[editPopupVisible])
+
 
   useEffect(() => {
     console.log(newMovieData)
@@ -151,7 +158,6 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   id="title"
                   name="title"
                   value={newMovieData.title}
-                  placeholder={movieData.name}
                   onChange={handleChange}
               />
             </label>
@@ -162,8 +168,8 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <DatePicker
                 id="date"
                 selected={startDate}
-                placeholderText={movieData.year}
                 onChange={(date: Date) => handleDateChange(date)}
+                placeholderText={movieData.year}
               />
             </label>
 
@@ -173,7 +179,6 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   id="movie-url"
                   name="movieUrl"
                   value={newMovieData.movieUrl}
-                  placeholder={movieData.img}
                   onChange={handleChange}
               />
             </label>
@@ -196,7 +201,6 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   name="overview"
                   value={newMovieData.overview}
                   onChange={handleChange}
-                  placeholder={movieData.desc}
               />
             </label>
 
@@ -205,9 +209,8 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <input
                   id="runtime"
                   name="runtime"
-                  value={newMovieData.runtime}
+                  value={newMovieData.runtime ? newMovieData.runtime : '--'}
                   onChange={handleChange}
-                  placeholder={movieData.runtime ? movieData.runtime : '--'}
               />
             </label>
 

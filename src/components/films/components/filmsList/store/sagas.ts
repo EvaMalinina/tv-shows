@@ -1,4 +1,4 @@
-import {call, put, takeEvery, delay} from 'redux-saga/effects';
+import {call, put, takeLatest, delay} from 'redux-saga/effects';
 import {GET_MOVIES_START} from './types';
 import {baseUrl} from "../../../../../url";
 import {getMoviesDataFailure, getMoviesDataSuccess} from "./actions";
@@ -18,7 +18,7 @@ function* fetchMovies() {
 
 
 function* watchFetchMovies() {
-  yield takeEvery(GET_MOVIES_START, fetchMovies);
+  yield takeLatest(GET_MOVIES_START, fetchMovies);
 }
 
 
