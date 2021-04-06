@@ -1,8 +1,8 @@
-import React, {FormEvent, useEffect, useState} from "react";
+import React, { useEffect, useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
-import { Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit } from "./filmPopups.styled";
+import {Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit, ErrorMsg} from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
 import {IPopupProps} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
@@ -13,6 +13,8 @@ import Portal from "../alerts/Portal";
 import Alert from "../alerts/Alert";
 import {sendNewMovieData, updateMovieData} from "./storeMovie/actions";
 import {showAlert} from "./storeAlerts/actions";
+import {useFormik} from "formik";
+import {formSchema} from "./formValidation";
 
 
 enum Genre {
@@ -31,23 +33,29 @@ const _genreOptions: Option[] = Object
 
 interface IMovieData {
   title: string,
-  startDate: string,
+  startDate: Date | [Date, Date]  | null,
   movieUrl: string,
   genre: string,
   overview: string,
   runtime: number
 }
 
+interface IDatePickerField {
+  name: string,
+  onChange: Function,
+  value: Date | [Date, Date] | null
+}
+
 const FilmPopup = ({labels, type}: IPopupProps) => {
   const initialEmptyMovieData = {
-    title: ' ',
-    startDate: ' ',
-    movieUrl: ' ',
-    genre: ' ',
-    overview: ' ',
+    title: '',
+    startDate: null,
+    movieUrl: '',
+    genre: '',
+    overview: '',
     runtime: 60
   }
-  const [startDate, setStartDate] = useState<Date | [Date, Date] | null>(null);
+
   const [newMovieData, setNewMovieData] = useState<IMovieData>(initialEmptyMovieData);
 
   // having troubles typing props here
@@ -64,42 +72,26 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     dispatch(controlPopupVisibility(type, false));
   }
 
-  const handleChange = (e: FormEvent) => {
-    let { name, value } = e.target;
-    setNewMovieData({...newMovieData, [name]: value });
-  }
 
-  const handleGenreChange = (value: string) => {
-    setNewMovieData({...newMovieData, genre: value });
-  }
-
-  const handleDateChange = (value: Date) => {
-    setStartDate(value);
-    setNewMovieData({...newMovieData, startDate: value.toLocaleDateString() });
-  }
-
-  const resetForm = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+  const resetForm = () => {
     setNewMovieData(initialEmptyMovieData);
   }
 
-
-  const sendFilmData = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+  const sendFilmData = (values: IMovieData) => {
     try {
-      dispatch(sendNewMovieData(newMovieData));
-      resetForm(e);
+      dispatch(sendNewMovieData({...values, startDate: values.startDate.toLocaleDateString()}));
+      resetForm();
       dispatch(getMoviesDataStart());
     } catch (e) {
       dispatch(showAlert(e))
     }
   };
 
-  const sendUpdateFilmData = (e: { preventDefault: () => void; }) => {
-    e.preventDefault();
+
+  const sendUpdateFilmData = (values: IMovieData) => {
     try {
       const movieId = movieData.movieId;
-      const updatedMovieData = {...newMovieData, movieId};
+      const updatedMovieData = {...values, movieId, startDate: values.startDate.toLocaleDateString()};
 
       dispatch(updateMovieData(updatedMovieData));
       dispatch(getMoviesDataStart());
@@ -126,12 +118,31 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     }
   },[editPopupVisible])
 
+  const formik = useFormik({
+    initialValues: newMovieData,
+    validationSchema: formSchema,
+    onSubmit: !editPopupVisible ?
+        (values) => sendFilmData(values)
+        :
+        (values) => sendUpdateFilmData(values)
+  });
 
   useEffect(() => {
     console.log(newMovieData)
   }, [newMovieData])
 
   const AlertComponent = () => <Alert text={notification.alertText} type={notification.alertType}/>;
+
+  const DatePickerField = ({ name, value, onChange }: IDatePickerField) => {
+    return (
+        <DatePicker
+            selected={(value && new Date(value)) || null}
+            onChange={val => {
+              onChange(name, val);
+            }}
+        />
+    );
+  };
 
   return !!visible && (
     <Bg>
@@ -151,26 +162,31 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
                   </label>
                 </>
             }
-
             <label htmlFor="title">
               Title
               <input
                   id="title"
                   name="title"
-                  value={newMovieData.title}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.title}
               />
+              {
+                !!formik.errors.title && formik.touched.title &&
+                <ErrorMsg>{formik.errors.title}</ErrorMsg>
+              }
             </label>
 
-            <label htmlFor="date">
+            <label htmlFor="startDate">
               Release Date
-              {/*issues with ts error can't be resolved*/}
-              <DatePicker
-                id="date"
-                selected={startDate}
-                onChange={(date: Date) => handleDateChange(date)}
-                placeholderText={movieData.year}
+              <DatePickerField
+                  name="startDate"
+                  value={formik.values.startDate}
+                  onChange={formik.setFieldValue}
               />
+              {
+                !!formik.errors.startDate && formik.touched.startDate &&
+                <ErrorMsg>{formik.errors.startDate}</ErrorMsg>
+              }
             </label>
 
             <label htmlFor="movie-url">
@@ -178,20 +194,27 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <input
                   id="movie-url"
                   name="movieUrl"
-                  value={newMovieData.movieUrl}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.movieUrl}
               />
+              {
+                !!formik.errors.movieUrl && formik.touched.movieUrl &&
+                <ErrorMsg>{formik.errors.movieUrl}</ErrorMsg>
+              }
             </label>
 
             <label htmlFor="genre">
               genre
               <div style={{marginTop: '5px'}}>
                 <SelectC
-                  selectedOption={newMovieData.genre}
                   options={_genreOptions}
-                  onHandleChange={(val: string) => handleGenreChange(val)}
+                  onHandleChange={(val: string) => formik.setFieldValue('genre', val)}
                 />
               </div>
+              {
+                !!formik.errors.genre && formik.touched.genre &&
+                <ErrorMsg>{formik.errors.genre}</ErrorMsg>
+              }
             </label>
 
             <label htmlFor="overview">
@@ -199,9 +222,13 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <input
                   id="overview"
                   name="overview"
-                  value={newMovieData.overview}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.overview}
               />
+              {
+                !!formik.errors.overview && formik.touched.overview &&
+                <ErrorMsg>{formik.errors.overview}</ErrorMsg>
+              }
             </label>
 
             <label htmlFor="runtime">
@@ -209,18 +236,22 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               <input
                   id="runtime"
                   name="runtime"
-                  value={newMovieData.runtime ? newMovieData.runtime : '--'}
-                  onChange={handleChange}
+                  onChange={formik.handleChange}
+                  value={formik.values.runtime}
               />
+              {
+                !!formik.errors.runtime && formik.touched.runtime &&
+                <ErrorMsg>{formik.errors.runtime}</ErrorMsg>
+              }
             </label>
 
             <BtnsWrapper>
               <BtnReset onClick={resetForm}>Reset</BtnReset>
               {
                 type === 'add' ?
-                    <BtnSubmit onClick={(e) => sendFilmData(e)}>{labels.btnSubmit}</BtnSubmit>
+                    <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>{labels.btnSubmit}</BtnSubmit>
                     :
-                    <BtnSubmit onClick={sendUpdateFilmData}>Update</BtnSubmit>
+                    <BtnSubmit onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Update</BtnSubmit>
               }
             </BtnsWrapper>
           </Form>

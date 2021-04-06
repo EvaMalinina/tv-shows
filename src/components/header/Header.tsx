@@ -16,7 +16,7 @@ import {
 } from "./header.styled";
 import Title from "../ui/Title/Title";
 import Logo from "../ui/Logo/Logo";
-import FilmOverview from "../filmPopups/filmOverview";
+import FilmOverview from "../filmPopups/FilmOverview";
 import {ILabel} from "../home/Home";
 import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "../filmPopups/storePopups/actions";
