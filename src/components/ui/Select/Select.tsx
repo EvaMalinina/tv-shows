@@ -10,13 +10,14 @@ type Option = {
 
 interface IProps {
   options: Option[],
-  onHandleChange: Function
+  onHandleChange: Function,
+  selectedGenre: string
 }
 
 
-const SelectC = ({options, onHandleChange}: IProps) => {
+const SelectC = ({options, onHandleChange, selectedGenre}: IProps) => {
 
-  const [defaultOption, setDefaultOption] = useState<Option | null>(null);
+  const [defaultOption, setDefaultOption] = useState<Option | null>({value: selectedGenre, label: selectedGenre});
 
   const pickOption = (selectedOption: Option) => {
     setDefaultOption(selectedOption);

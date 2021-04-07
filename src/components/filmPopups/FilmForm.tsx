@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "../../styles/general";
 import {Bg, BgForm, Form, BtnPopupClose, BtnsWrapper, BtnReset, BtnSubmit, ErrorMsg} from "./filmPopups.styled";
 import SelectC from "../ui/Select/Select";
-import {IPopupProps} from "./interfaces";
+import {IType} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "./storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
@@ -46,7 +46,7 @@ interface IDatePickerField {
   value: Date | [Date, Date] | null
 }
 
-const FilmPopup = ({labels, type}: IPopupProps) => {
+const FilmPopup = ({type}: IType) => {
   const initialEmptyMovieData = {
     title: '',
     startDate: null,
@@ -72,7 +72,6 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     dispatch(controlPopupVisibility(type, false));
   }
 
-
   const resetForm = () => {
     setNewMovieData(initialEmptyMovieData);
   }
@@ -91,7 +90,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
   const sendUpdateFilmData = (values: IMovieData) => {
     try {
       const movieId = movieData.movieId;
-      const updatedMovieData = {...values, movieId, startDate: values.startDate.toLocaleDateString()};
+      const updatedMovieData = {...values, movieId};
 
       dispatch(updateMovieData(updatedMovieData));
       dispatch(getMoviesDataStart());
@@ -100,31 +99,53 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     }
   }
 
-  useEffect(() => {
-    movieData.name && editPopupVisible ?
-    setNewMovieData({
-      ...newMovieData,
-      title: movieData.name,
-      startDate: movieData.year,
-      movieUrl: movieData.img,
-      genre: movieData.genre,
-      overview: movieData.overview,
-      runtime: movieData.runtime
-    })
-      : null;
 
-    if (!editPopupVisible) {
-      setNewMovieData(initialEmptyMovieData);
+  useEffect(() => {
+    if(movieData.name && editPopupVisible){
+      const initialValues = {
+        ...newMovieData,
+        title: movieData.name,
+        startDate: movieData.year,
+        movieUrl: movieData.img,
+        genre: movieData.genre,
+        overview: movieData.overview,
+        runtime: movieData.runtime
+      }
+      setNewMovieData(initialValues)
+      Object.assign(formik.initialValues, initialValues)
+    }
+
+    else if (!editPopupVisible) {
+      Object.assign(formik.initialValues, {
+        title: '',
+        startDate: null,
+        movieUrl: '',
+        genre: '',
+        overview: '',
+        runtime: 60
+      })
     }
   },[editPopupVisible])
 
+  const  submitForm = (values: IMovieData) => {
+     if (!editPopupVisible) {
+       sendFilmData(values)
+     } else {
+       sendUpdateFilmData(values)
+     }
+  };
+
   const formik = useFormik({
-    initialValues: newMovieData,
+    initialValues: {
+      title: '',
+      startDate: null,
+      movieUrl: '',
+      genre: '',
+      overview: '',
+      runtime: 60
+    },
     validationSchema: formSchema,
-    onSubmit: !editPopupVisible ?
-        (values) => sendFilmData(values)
-        :
-        (values) => sendUpdateFilmData(values)
+    onSubmit: submitForm
   });
 
   useEffect(() => {
@@ -149,7 +170,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
       <BgForm>
         <Container>
           <Form>
-            <h2>{labels.mainTitle}</h2>
+            <h2>{type} movie</h2>
             <BtnPopupClose onClick={onClose}>&#10005;</BtnPopupClose>
             {
               type === 'add' ?
@@ -207,6 +228,7 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
               genre
               <div style={{marginTop: '5px'}}>
                 <SelectC
+                  selectedGenre={formik.values.genre}
                   options={_genreOptions}
                   onHandleChange={(val: string) => formik.setFieldValue('genre', val)}
                 />
@@ -246,12 +268,12 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
             </label>
 
             <BtnsWrapper>
-              <BtnReset onClick={resetForm}>Reset</BtnReset>
+              <BtnReset onClick={formik.handleReset}>Reset</BtnReset>
               {
                 type === 'add' ?
-                    <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>{labels.btnSubmit}</BtnSubmit>
+                    <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Submit</BtnSubmit>
                     :
-                    <BtnSubmit onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Update</BtnSubmit>
+                    <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Update</BtnSubmit>
               }
             </BtnsWrapper>
           </Form>

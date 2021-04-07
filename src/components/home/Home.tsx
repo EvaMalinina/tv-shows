@@ -11,47 +11,13 @@ const FilmPopup =  React.lazy(() => import(`../filmPopups/FilmForm`));
 const FilmDeletePopup =  React.lazy(() => import(`../filmPopups/FilmDeletePopup`));
 
 
-export interface ILabel {
-  mainTitle: string,
-  title: string,
-  date: string,
-  url?: string,
-  genre?: string,
-  overview: string,
-  runtime: string,
-  btnSubmit?: string,
-  img?: string,
-  rating?: number
-}
-
-const labelOptionsAdd: ILabel = {
-  mainTitle: 'Add movie',
-  title: 'Moran',
-  date: 'Select date',
-  url: 'Movie URL here',
-  overview: 'Overview',
-  runtime: 'Runtime',
-  btnSubmit: 'Submit'
-}
-
-const labelOptionsEdit: ILabel = {
-  mainTitle: 'edit movie',
-  title: 'Moran',
-  date: '03/08/2019',
-  url: 'Movie URL here',
-  overview: 'Overview',
-  runtime: 'Runtime',
-  btnSubmit: 'Save'
-}
-
 const Home = () => {
-
   return (
     <>
       <ErrorBoundary>
         <React.Suspense fallback={<SuspenseWrapper><h4>Loading...</h4></SuspenseWrapper>}>
-          <FilmPopup labels={labelOptionsAdd} type="add" />
-          <FilmPopup labels={labelOptionsEdit} type="edit" />
+          <FilmPopup type="add" />
+          <FilmPopup type="edit" />
           <FilmDeletePopup type="remove"/>
         </React.Suspense>
 
