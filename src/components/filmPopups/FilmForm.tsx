@@ -100,26 +100,8 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
     }
   }
 
-  useEffect(() => {
-    movieData.name && editPopupVisible ?
-    setNewMovieData({
-      ...newMovieData,
-      title: movieData.name,
-      startDate: movieData.year,
-      movieUrl: movieData.img,
-      genre: movieData.genre,
-      overview: movieData.overview,
-      runtime: movieData.runtime
-    })
-      : null;
-
-    if (!editPopupVisible) {
-      setNewMovieData(initialEmptyMovieData);
-    }
-  },[editPopupVisible])
-
   const formik = useFormik({
-    initialValues: newMovieData,
+    initialValues: {},
     validationSchema: formSchema,
     onSubmit: !editPopupVisible ?
         (values) => sendFilmData(values)
@@ -128,8 +110,23 @@ const FilmPopup = ({labels, type}: IPopupProps) => {
   });
 
   useEffect(() => {
-    console.log(newMovieData)
-  }, [newMovieData])
+    if(movieData.name && editPopupVisible){
+      const initialValues = {
+          ...newMovieData,
+          title: movieData.name,
+          startDate: movieData.year,
+          movieUrl: movieData.img,
+          genre: movieData.genre,
+          overview: movieData.overview,
+          runtime: movieData.runtime
+        }
+      setNewMovieData(initialValues)
+      Object.assign(formik.initialValues, initialValues)
+    }
+
+  },[editPopupVisible])
+
+
 
   const AlertComponent = () => <Alert text={notification.alertText} type={notification.alertType}/>;
 

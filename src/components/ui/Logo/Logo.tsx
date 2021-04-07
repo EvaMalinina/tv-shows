@@ -1,5 +1,5 @@
 import React from "react";
-import { LogoStyled } from "./logo.styled";
+import { LogoStyled } from "./Logo.styled";
 
 const Logo = () => {
   return (
