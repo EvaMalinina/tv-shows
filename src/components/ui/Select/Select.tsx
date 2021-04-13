@@ -8,27 +8,29 @@ type Option = {
   label: string;
 };
 
-interface Props {
+interface IProps {
   options: Option[],
   onHandleChange: Function,
-  selectedOption: string
+  selectedGenre: string
 }
 
 
-const SelectC = ({options, onHandleChange, selectedOption}: Props) => {
+const SelectC = ({options, onHandleChange, selectedGenre}: IProps) => {
 
-  const [defaultOption, setDefaultOption] = useState<Option | null>(null);
+  const [defaultOption, setDefaultOption] = useState<Option | null>({value: selectedGenre, label: selectedGenre});
 
-  const pickOption = (defaultOption: Option) => {
-    setDefaultOption(defaultOption)
-    onHandleChange(defaultOption?.value)
+  const pickOption = (selectedOption: Option) => {
+    setDefaultOption(selectedOption);
+    onHandleChange(selectedOption.value);
   }
 
   return (
       <Select
           options={options}
-          value={{ value: selectedOption, label: selectedOption}}
-          onChange={pickOption}
+          value={defaultOption}
+          onChange={selectedOption => {
+            selectedOption ? pickOption(selectedOption) : null;
+          }}
           styles={colourSelectStyles}
           isClearable={false}
           isSearchable={false}

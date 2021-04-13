@@ -5,6 +5,7 @@ import MovieMenu from "../../../ui/MovieMenu/MovieMenu";
 import {useDispatch} from "react-redux";
 import {controlPopupVisibility} from "../../../filmPopups/storePopups/actions";
 import {IMovie} from "../../../../store/interfaces";
+import {getSingleMovieData} from "../../../filmPopups/storeMovie/actions";
 
 
 const FilmsItemC = ({movieId, name, desc, category, year, img, runtime}: IMovie) => {
@@ -12,6 +13,9 @@ const FilmsItemC = ({movieId, name, desc, category, year, img, runtime}: IMovie)
   const onFilmOverviewOpen = () => {
     dispatch(
         controlPopupVisibility('filmOverview', true)
+    )
+    dispatch(
+        getSingleMovieData({movieId, name, desc, category, year, img, runtime})
     )
   };
   const defaultPoster = 'https://mir-s3-cdn-cf.behance.net/project_modules/fs/9556d16312333.5691dd2255721.jpg'

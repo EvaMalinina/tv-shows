@@ -9,20 +9,22 @@ import {
   Subtitle
 } from "./filmPopups.styled";
 import {Container, ContainerColumn, ContainerRow, ContainerRowAlignStart} from "../../styles/general";
-import {IPopupProps} from "./interfaces";
+import {IType} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "./storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
 
 
-const FilmOverview = ({labels, type}: IPopupProps) => {
+const FilmOverview = ({type}: IType) => {
 
   const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility)
 
   const dispatch = useDispatch();
   const onClose = () => dispatch(controlPopupVisibility(type, false));
+  const movieData = useSelector(state => state.singleMovieReducer.movie);
+  const defaultRating = 4.6;
 
-  return visible && (
+  return visible  &&(
       <FilmOverviewPopup>
         <Container>
           <BtnPopupClose onClick={onClose}>
@@ -30,20 +32,20 @@ const FilmOverview = ({labels, type}: IPopupProps) => {
           </BtnPopupClose>
           <ContainerRowAlignStart>
             <FilmPoster>
-              <img src={labels.img} alt="film-poster" style={{width: '100%', height: '300px'}}/>
+              <img src={movieData.img} alt="film-poster" style={{width: '100%', height: '300px'}}/>
             </FilmPoster>
             <FilmInfo>
               <ContainerColumn>
                 <ContainerRow>
-                  <h2>{labels.mainTitle}</h2>
-                  <div>{labels.rating}</div>
+                  <h2>{movieData.name}</h2>
+                  <div>{movieData.rating ? movieData.rating : defaultRating}</div>
                 </ContainerRow>
-                <Subtitle>{labels.title}</Subtitle>
+                <Subtitle>Read about movie</Subtitle>
                 <ContainerRow>
-                  <FilmInfoColorRed>{labels.date}</FilmInfoColorRed>
-                  <FilmInfoColorRed>{labels.runtime} min</FilmInfoColorRed>
+                  <FilmInfoColorRed>{movieData.year}</FilmInfoColorRed>
+                  <FilmInfoColorRed>{movieData.runtime} min</FilmInfoColorRed>
                 </ContainerRow>
-                <p>{labels.overview}</p>
+                <p>{movieData.overview}</p>
               </ContainerColumn>
             </FilmInfo>
           </ContainerRowAlignStart>

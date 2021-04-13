@@ -46,7 +46,8 @@ export const Form = styled.form`
   }
   
   label {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
+    position: relative;
     color: ${props => props.theme.$red};
     text-transform: uppercase;
     display: flex;
@@ -189,4 +190,13 @@ export const SearchIcon = styled.div`
   height: 20px;
   background: url(${SearchIconLink}) center no-repeat;
   background-size: contain;
+`
+
+export const ErrorMsg = styled.span`
+  color:  ${props => props.theme.$white};
+  font-size: 10px;
+  font-style: italic;
+  text-transform: lowercase;
+  position: absolute;
+  bottom: -12px;
 `
