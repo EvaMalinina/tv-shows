@@ -22,6 +22,7 @@ const FilmOverview = ({type}: IType) => {
   const dispatch = useDispatch();
   const onClose = () => dispatch(controlPopupVisibility(type, false));
   const movieData = useSelector(state => state.singleMovieReducer.movie);
+  const defaultRating = 4.6;
 
   return visible  &&(
       <FilmOverviewPopup>
@@ -37,7 +38,7 @@ const FilmOverview = ({type}: IType) => {
               <ContainerColumn>
                 <ContainerRow>
                   <h2>{movieData.name}</h2>
-                  <div>{movieData.rating ? movieData.rating : '4.6'}</div>
+                  <div>{movieData.rating ? movieData.rating : defaultRating}</div>
                 </ContainerRow>
                 <Subtitle>Read about movie</Subtitle>
                 <ContainerRow>
