@@ -5,6 +5,7 @@ import { FilmsQ } from './filmsList.styled';
 import { useDispatch, useSelector } from "react-redux";
 import { getMoviesDataStart } from "./store/actions";
 import {IMovie} from "../../../../store/interfaces";
+import NoMoviesFound from "../../../NoMoviesFound/NoMoviesFound";
 
 export const FilmsListC = () => {
   const [q, setQ] = useState<number>(0);
@@ -66,7 +67,7 @@ export const FilmsListC = () => {
     <ContainerColumn>
       <FilmsQ><b>{q}</b> films found</FilmsQ>
       <ContainerRowAlignStart>
-        { moviesArr &&
+        { moviesArr && moviesArr.length > 0 ?
           moviesArr.map(({_id, name, desc, category, year, img, runtime}) => {
             // having ts issue here
             return(
@@ -82,6 +83,8 @@ export const FilmsListC = () => {
               />
             )
           })
+          :
+          <NoMoviesFound/>
         }
       </ContainerRowAlignStart>
     </ContainerColumn>

@@ -38,9 +38,18 @@ export const Btn = styled.button`
   text-transform: uppercase;
   color: ${props => props.theme.$red};
   background-color: ${props => props.theme.$btnBg};
-  border-radius: 2px;
+  border-radi${props => props.theme.$red}us: 2px;
   overflow: hidden;
   letter-spacing: 1px;
+`
+
+export const BtnErrorPage = styled(Btn)`
+  padding: 12px 40px;
+  border: 2px solid ${props => props.theme.$red};
+  background-color: ${props => props.theme.$trans};
+  text-transform: uppercase;
+  border-radius: 4px;
+  font-size: 16px;
 `
 
 export const SuspenseWrapper = styled.div`

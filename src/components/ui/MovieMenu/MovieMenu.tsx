@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {FormEvent, useState} from "react";
 import { MovieMenuStyled, MovieMenuUl, MovieMenuLi } from "./movieMenu.styled";
 import {controlPopupVisibility} from "../../filmPopups/storePopups/actions";
 import {useDispatch} from "react-redux";
@@ -10,13 +10,15 @@ import {IMovie} from "../../../store/interfaces";
 const MovieMenu = ({data}: {data: IMovie}) => {
 
   const [isClicked, setIsClicked] = useState<boolean>(false);
-  const handleClick = (e: { stopPropagation: () => void; }) => {
+  const handleClick = (e: FormEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setIsClicked(!isClicked);
   }
 
   const dispatch = useDispatch();
-  const onEditDialogOpen = (e: { stopPropagation: () => void; }) => {
+  const onEditDialogOpen = (e: FormEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     dispatch(
       controlPopupVisibility('edit', true)
@@ -26,7 +28,8 @@ const MovieMenu = ({data}: {data: IMovie}) => {
     )
   };
 
-  const onDeleteDialogOpen = (e: { stopPropagation: () => void; }) => {
+  const onDeleteDialogOpen = (e: FormEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     dispatch(
         controlPopupVisibility('remove', true)

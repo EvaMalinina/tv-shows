@@ -1,22 +1,46 @@
 import React from 'react';
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch, Redirect
+} from 'react-router-dom';
 import Home from './components/home/Home';
 import { ThemeProvider } from 'styled-components';
 import { theme } from "./styles/theme";
 import { GlobalStyles } from "./styles/globalStyles";
 import { Provider } from 'react-redux';
 import initialStore from './store/store';
+import ErrorPage from "./components/errorPage/ErrorPage";
 
 
 export const App = () => {
   return (
-    <>
-      <Provider store={initialStore}>
-        <GlobalStyles/>
-        <ThemeProvider theme={theme}>
-          <Home/>
-        </ThemeProvider>
-      </Provider>
-    </>
+    <Router>
+      <Switch>
+        <Provider store={initialStore}>
+          <GlobalStyles/>
+          <ThemeProvider theme={theme}>
+            <Route
+                exact
+                path="/"
+                component={Home}
+            />
+            <Route
+                exact
+                path="/movie/:id"
+                component={Home}
+            />
+            <Route
+                exact
+                path="/error-404"
+                component={ErrorPage}
+            />
+            <Redirect to="/error-404" />
+
+          </ThemeProvider>
+        </Provider>
+      </Switch>
+    </Router>
   )
 }
 
