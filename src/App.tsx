@@ -32,10 +32,14 @@ export const App = () => {
             />
             <Route
                 exact
-                path="/error-404"
+                path="/search/:titleValue"
+                component={Home}
+            />
+            <Route
+                exact
+                path="*"
                 component={ErrorPage}
             />
-            <Redirect to="/error-404" />
 
           </ThemeProvider>
         </Provider>

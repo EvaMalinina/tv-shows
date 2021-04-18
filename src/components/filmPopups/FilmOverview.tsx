@@ -13,6 +13,7 @@ import {IType} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "./storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
+import {Link} from "react-router-dom";
 
 
 const FilmOverview = ({type}: IType) => {
@@ -27,9 +28,12 @@ const FilmOverview = ({type}: IType) => {
   return visible  &&(
       <FilmOverviewPopup>
         <Container>
-          <BtnPopupClose onClick={onClose}>
-            <SearchIcon/>
-          </BtnPopupClose>
+          <Link to={`/`}>
+            <BtnPopupClose onClick={onClose}>
+              <SearchIcon/>
+            </BtnPopupClose>
+          </Link>
+
           <ContainerRowAlignStart>
             <FilmPoster>
               <img src={movieData.img} alt="film-poster" style={{width: '100%', height: '300px'}}/>

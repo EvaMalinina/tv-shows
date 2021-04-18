@@ -4,8 +4,9 @@ import { ContainerColumn, ContainerRowAlignStart } from  '../../../../styles/gen
 import { FilmsQ } from './filmsList.styled';
 import { useDispatch, useSelector } from "react-redux";
 import { getMoviesDataStart } from "./store/actions";
-import {IMovie} from "../../../../store/interfaces";
+import { IMovie } from "../../../../store/interfaces";
 import NoMoviesFound from "../../../NoMoviesFound/NoMoviesFound";
+import { useLocation } from "react-router-dom";
 
 export const FilmsListC = () => {
   const [q, setQ] = useState<number>(0);
@@ -17,12 +18,16 @@ export const FilmsListC = () => {
   const filter = useSelector(state => state.filterReducer.filter);
   const sortBy = useSelector(state => state.filterReducer.sortBy);
 
-  useEffect(() => {
-    dispatch(getMoviesDataStart());
-  }, []);
+  const defaultPage = useLocation();
 
   useEffect(() => {
-    movies && movies.length > 0 ? setMoviesArr(movies) : null;
+    if (defaultPage.pathname === '/')
+      dispatch(getMoviesDataStart());
+  }, [defaultPage]);
+
+
+  useEffect(() => {
+    movies && movies.length > 0 ? setMoviesArr(movies) : setMoviesArr([]);
   }, [movies]);
 
   const getMoviesQ = useCallback(() => {

@@ -3,6 +3,8 @@ import errorImg from "../../assets/404.jpg";
 
 export const ErrorPageC = styled.div`
  position: absolute;
+ z-index: -1;
+ top: 0;
  padding-top: 50px;
  text-align: center;
  width: 100%;

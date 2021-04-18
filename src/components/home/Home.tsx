@@ -1,8 +1,4 @@
 import React from "react";
-import {
-  Link,
-  Route,
-} from 'react-router-dom';
 import Films from "../films/Films";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
