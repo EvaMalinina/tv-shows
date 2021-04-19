@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Title component It should render Title component 1`] = `
+<DocumentFragment>
+  <h2
+    class="sc-bdfBwQ kEYBXB"
+  >
+    find your movie
+  </h2>
+</DocumentFragment>
+`;
