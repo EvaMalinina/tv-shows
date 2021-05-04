@@ -15,6 +15,7 @@ import {sendNewMovieData, updateMovieData} from "./storeMovie/actions";
 import {showAlert} from "./storeAlerts/actions";
 import {useFormik} from "formik";
 import {formSchema} from "./formValidation";
+import { RootState } from "../../store/reducer";
 
 
 enum Genre {
@@ -33,7 +34,7 @@ const _genreOptions: Option[] = Object
 
 interface IMovieData {
   title: string,
-  startDate: Date | [Date, Date]  | null,
+  startDate: Date | null,
   movieUrl: string,
   genre: string,
   overview: string,
@@ -43,7 +44,7 @@ interface IMovieData {
 interface IDatePickerField {
   name: string,
   onChange: Function,
-  value: Date | [Date, Date] | null
+  value: Date | null
 }
 
 const FilmPopup = ({type}: IType) => {
@@ -59,12 +60,13 @@ const FilmPopup = ({type}: IType) => {
   const [newMovieData, setNewMovieData] = useState<IMovieData>(initialEmptyMovieData);
 
   // having troubles typing props here
+  // @ts-ignore
   const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility);
   const editPopupVisible = useSelector(({popupsReducer: {['edit']: visibility}}: IFilmPopupVisibility) => visibility)
 
-  const movieData = useSelector(state => state.singleMovieReducer.movie);
+  const movieData = useSelector((state: RootState) => state.singleMovieReducer.movie);
 
-  const notification = useSelector(state => state.alertsReducer);
+  const notification = useSelector((state: RootState) => state.alertsReducer);
 
 
   const dispatch = useDispatch();
@@ -78,7 +80,10 @@ const FilmPopup = ({type}: IType) => {
 
   const sendFilmData = (values: IMovieData) => {
     try {
-      dispatch(sendNewMovieData({...values, startDate: values.startDate.toLocaleDateString()}));
+      dispatch(sendNewMovieData({
+        ...values,
+        startDate: values.startDate ? values.startDate.toLocaleDateString() : null
+      }));
       resetForm();
       dispatch(getMoviesDataStart());
     } catch (e) {
@@ -165,129 +170,131 @@ const FilmPopup = ({type}: IType) => {
     );
   };
 
-  return !!visible && (
-    <Bg>
-      <BgForm>
-        <Container>
-          <Form>
-            <h2>{type} movie</h2>
-            <BtnPopupClose onClick={onClose}>&#10005;</BtnPopupClose>
-            {
-              type === 'add' ?
-                <></>
+  return <>{
+    !!visible && (
+        <Bg>
+          <BgForm>
+            <Container>
+              <Form>
+                <h2>{type} movie</h2>
+                <BtnPopupClose onClick={onClose}>&#10005;</BtnPopupClose>
+                {
+                  type === 'add' ?
+                      <></>
+                      :
+                      <>
+                        <label htmlFor="movieId">
+                          Movie Id
+                          <input id="movieId" placeholder={movieData.movieId} readOnly={true}/>
+                        </label>
+                      </>
+                }
+                <label htmlFor="title">
+                  Title
+                  <input
+                      id="title"
+                      name="title"
+                      onChange={formik.handleChange}
+                      value={formik.values.title}
+                  />
+                  {
+                    !!formik.errors.title && formik.touched.title &&
+                    <ErrorMsg>{formik.errors.title}</ErrorMsg>
+                  }
+                </label>
+
+                <label htmlFor="startDate">
+                  Release Date
+                  <DatePickerField
+                      name="startDate"
+                      value={formik.values.startDate}
+                      onChange={formik.setFieldValue}
+                  />
+                  {
+                    !!formik.errors.startDate && formik.touched.startDate &&
+                    <ErrorMsg>{formik.errors.startDate}</ErrorMsg>
+                  }
+                </label>
+
+                <label htmlFor="movie-url">
+                  movie url
+                  <input
+                      id="movie-url"
+                      name="movieUrl"
+                      onChange={formik.handleChange}
+                      value={formik.values.movieUrl}
+                  />
+                  {
+                    !!formik.errors.movieUrl && formik.touched.movieUrl &&
+                    <ErrorMsg>{formik.errors.movieUrl}</ErrorMsg>
+                  }
+                </label>
+
+                <label htmlFor="genre">
+                  genre
+                  <div style={{marginTop: '5px'}}>
+                    <SelectC
+                        selectedGenre={formik.values.genre}
+                        options={_genreOptions}
+                        onHandleChange={(val: string) => formik.setFieldValue('genre', val)}
+                    />
+                  </div>
+                  {
+                    !!formik.errors.genre && formik.touched.genre &&
+                    <ErrorMsg>{formik.errors.genre}</ErrorMsg>
+                  }
+                </label>
+
+                <label htmlFor="overview">
+                  Overview
+                  <input
+                      id="overview"
+                      name="overview"
+                      onChange={formik.handleChange}
+                      value={formik.values.overview}
+                  />
+                  {
+                    !!formik.errors.overview && formik.touched.overview &&
+                    <ErrorMsg>{formik.errors.overview}</ErrorMsg>
+                  }
+                </label>
+
+                <label htmlFor="runtime">
+                  Runtime
+                  <input
+                      id="runtime"
+                      name="runtime"
+                      onChange={formik.handleChange}
+                      value={formik.values.runtime}
+                  />
+                  {
+                    !!formik.errors.runtime && formik.touched.runtime &&
+                    <ErrorMsg>{formik.errors.runtime}</ErrorMsg>
+                  }
+                </label>
+
+                <BtnsWrapper>
+                  <BtnReset onClick={formik.handleReset}>Reset</BtnReset>
+                  {
+                    type === 'add' ?
+                        <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Submit</BtnSubmit>
+                        :
+                        <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Update</BtnSubmit>
+                  }
+                </BtnsWrapper>
+              </Form>
+            </Container>
+          </BgForm>
+
+          {
+            notification.alertIsVisible ?
+                <Portal children={<AlertComponent/>}/>
                 :
-                <>
-                  <label htmlFor="movieId">
-                    Movie Id
-                    <input id="movieId" placeholder={movieData.movieId} readOnly={true}/>
-                  </label>
-                </>
-            }
-            <label htmlFor="title">
-              Title
-              <input
-                  id="title"
-                  name="title"
-                  onChange={formik.handleChange}
-                  value={formik.values.title}
-              />
-              {
-                !!formik.errors.title && formik.touched.title &&
-                <ErrorMsg>{formik.errors.title}</ErrorMsg>
-              }
-            </label>
-
-            <label htmlFor="startDate">
-              Release Date
-              <DatePickerField
-                  name="startDate"
-                  value={formik.values.startDate}
-                  onChange={formik.setFieldValue}
-              />
-              {
-                !!formik.errors.startDate && formik.touched.startDate &&
-                <ErrorMsg>{formik.errors.startDate}</ErrorMsg>
-              }
-            </label>
-
-            <label htmlFor="movie-url">
-              movie url
-              <input
-                  id="movie-url"
-                  name="movieUrl"
-                  onChange={formik.handleChange}
-                  value={formik.values.movieUrl}
-              />
-              {
-                !!formik.errors.movieUrl && formik.touched.movieUrl &&
-                <ErrorMsg>{formik.errors.movieUrl}</ErrorMsg>
-              }
-            </label>
-
-            <label htmlFor="genre">
-              genre
-              <div style={{marginTop: '5px'}}>
-                <SelectC
-                  selectedGenre={formik.values.genre}
-                  options={_genreOptions}
-                  onHandleChange={(val: string) => formik.setFieldValue('genre', val)}
-                />
-              </div>
-              {
-                !!formik.errors.genre && formik.touched.genre &&
-                <ErrorMsg>{formik.errors.genre}</ErrorMsg>
-              }
-            </label>
-
-            <label htmlFor="overview">
-              Overview
-              <input
-                  id="overview"
-                  name="overview"
-                  onChange={formik.handleChange}
-                  value={formik.values.overview}
-              />
-              {
-                !!formik.errors.overview && formik.touched.overview &&
-                <ErrorMsg>{formik.errors.overview}</ErrorMsg>
-              }
-            </label>
-
-            <label htmlFor="runtime">
-              Runtime
-              <input
-                  id="runtime"
-                  name="runtime"
-                  onChange={formik.handleChange}
-                  value={formik.values.runtime}
-              />
-              {
-                !!formik.errors.runtime && formik.touched.runtime &&
-                <ErrorMsg>{formik.errors.runtime}</ErrorMsg>
-              }
-            </label>
-
-            <BtnsWrapper>
-              <BtnReset onClick={formik.handleReset}>Reset</BtnReset>
-              {
-                type === 'add' ?
-                    <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Submit</BtnSubmit>
-                    :
-                    <BtnSubmit type="submit" onClick={(e) => {e.preventDefault(); formik.handleSubmit()}}>Update</BtnSubmit>
-              }
-            </BtnsWrapper>
-          </Form>
-        </Container>
-      </BgForm>
-
-      {
-        notification.alertIsVisible ?
-            <Portal children={<AlertComponent/>}/>
-          :
-          <></>
-      }
-    </Bg>
-  )
+                <></>
+          }
+        </Bg>
+    )
+  }</>
 }
 
 export default FilmPopup;

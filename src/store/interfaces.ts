@@ -1,6 +1,6 @@
 export interface IAction {
   type: string,
-  payload: [] | string | {} | any
+  payload?: [] | string | {} | any
 }
 
 export interface IState {

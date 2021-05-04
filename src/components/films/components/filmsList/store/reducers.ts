@@ -7,7 +7,7 @@ const initialState = {
   error: null
 };
 
-export default function(state = initialState, action: IAction) {
+export default function (state = initialState, action: IAction) {
   switch (action.type) {
     case GET_MOVIES_START:
       return {

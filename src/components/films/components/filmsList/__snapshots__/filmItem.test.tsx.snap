@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`It should render list item - single movie view Render single movie view 1`] = `
+<DocumentFragment>
+  name && 
+  <div
+    class="sc-pFZIQ kievCr"
+  >
+    <div
+      class="sc-gsTCUz gATSVo"
+    >
+      <img
+        src="link"
+        style="width: 100%; height: 300px;"
+      />
+      <button
+        class="sc-jrAGrp inVoEh"
+      >
+        :
+      </button>
+      <h4
+        style="text-transform: capitalize;"
+      >
+        Hello
+      </h4>
+      <p>
+        I am hello
+      </p>
+      <span>
+        2021
+      </span>
+    </div>
+  </div>
+</DocumentFragment>
+`;

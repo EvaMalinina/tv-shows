@@ -11,8 +11,4 @@ const initialStore = createStore(rootReducer, composeWithDevTools(applyMiddlewar
 
 sagaMiddleware.run(rootSaga);
 
-
-//?
-// export const action = type => initialStore.dispatch({type})
-
 export default initialStore;

@@ -16,7 +16,16 @@ module.exports = {
     "node"
   ],
   "moduleNameMapper": {
-    "\\.(scss)$": "identity-obj-proxy",
+    "\\.(scss|css|png)$": "identity-obj-proxy"
   },
   "setupFilesAfterEnv": ["./setupTests.ts"],
+  "coverageDirectory": "test-coverage",
+  "coverageThreshold": {
+    "global": {
+      "branches": 0,
+      "functions": 0,
+      "lines": 0,
+      "statements": 0
+    }
+  },
 }
