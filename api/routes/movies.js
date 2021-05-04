@@ -88,4 +88,14 @@ app.patch('/movie/:id', async (req, res) => {
   }
 })
 
+app.get('/movie/:titleValue', async (req, res)  => {
+  const movies = await movieModel.find({ name: req.params.titleValue });
+
+  try {
+    res.send(movies);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+})
+
 module.exports = app

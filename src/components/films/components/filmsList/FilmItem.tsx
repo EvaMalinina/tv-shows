@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {controlPopupVisibility} from "../../../filmPopups/storePopups/actions";
 import {IMovie} from "../../../../store/interfaces";
 import {getSingleMovieData} from "../../../filmPopups/storeMovie/actions";
+import {Link} from "react-router-dom";
 
 
 const FilmsItemC = ({movieId, name, desc, category, year, img, runtime}: IMovie) => {
@@ -21,15 +22,17 @@ const FilmsItemC = ({movieId, name, desc, category, year, img, runtime}: IMovie)
   const defaultPoster = 'https://mir-s3-cdn-cf.behance.net/project_modules/fs/9556d16312333.5691dd2255721.jpg'
 
   return name && (
-    <Movie onClick={onFilmOverviewOpen}>
-      <ContainerColumn>
-        <img src={img ? img : defaultPoster} style={{ width: '100%', height: '300px'}} />
-        <MovieMenu data={{movieId, name, desc, category, year, img, runtime}}/>
-        <h4 style={{textTransform: "capitalize"}}>{name}</h4>
-        <p>{desc}</p>
-        <span>{year}</span>
-      </ContainerColumn>
-    </Movie>
+      <Link to={`/movie/${movieId}`}>
+        <Movie onClick={onFilmOverviewOpen}>
+          <ContainerColumn>
+            <img src={img ? img : defaultPoster} style={{ width: '100%', height: '300px'}} />
+            <MovieMenu data={{movieId, name, desc, category, year, img, runtime}}/>
+            <h4 style={{textTransform: "capitalize"}}>{name}</h4>
+            <p>{desc}</p>
+            <span>{year}</span>
+          </ContainerColumn>
+        </Movie>
+      </Link>
   )
 }
 

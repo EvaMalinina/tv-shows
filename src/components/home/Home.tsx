@@ -22,6 +22,7 @@ const Home = () => {
         </React.Suspense>
 
         <Header/>
+
         <Films/>
         <Footer>
           <Logo/>

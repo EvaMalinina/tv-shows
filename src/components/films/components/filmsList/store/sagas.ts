@@ -1,8 +1,17 @@
 import {call, put, takeLatest, delay} from 'redux-saga/effects';
-import {GET_MOVIES_START} from './types';
+import {GET_MOVIES_START, SEARCH_MOVIE} from './types';
 import {baseUrl} from "../../../../../url";
-import {getMoviesDataFailure, getMoviesDataSuccess} from "./actions";
+import {
+  getMoviesDataFailure,
+  getMoviesDataSuccess, searchMovieFailure,
+  searchMovieRequest, searchMovieSuccess
+} from "./actions";
+import axios from "axios";
+import {IMovie} from "../../../../../store/interfaces";
 
+interface res {
+  data: IMovie
+}
 
 function* fetchMovies() {
   try {
@@ -16,9 +25,24 @@ function* fetchMovies() {
   }
 }
 
-
 function* watchFetchMovies() {
   yield takeLatest(GET_MOVIES_START, fetchMovies);
+}
+
+
+function* searchMovie(data:any) {
+  try {
+    yield put(searchMovieRequest());
+    const res: res = yield call(() => axios.get(`${baseUrl}movie/${data.payload.trim()}`));
+
+    yield put(searchMovieSuccess(res.data));
+  } catch (e) {
+    yield put(searchMovieFailure(e.message));
+  }
+}
+
+export function* watchSearchMovie() {
+  yield takeLatest(SEARCH_MOVIE, searchMovie);
 }
 
 

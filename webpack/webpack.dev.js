@@ -29,6 +29,7 @@ module.exports = merge(common, {
   ],
   devServer: {
     contentBase: '../build',
-    port: 8082
+    port: 8082,
+    historyApiFallback: true,
   },
 })

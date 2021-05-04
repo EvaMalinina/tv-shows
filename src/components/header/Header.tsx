@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   Container,
   ContainerRow,
@@ -19,37 +19,38 @@ import FilmOverview from "../filmPopups/FilmOverview";
 import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "../filmPopups/storePopups/actions";
 import {IFilmPopupVisibility} from "../../store/interfaces";
+import {Link, useParams} from "react-router-dom";
+import {getMoviesDataStart, searchMovie} from "../films/components/filmsList/store/actions";
 
-interface IMovie {
-  name: string,
-  desc: string,
-  year: number
+interface ITitle {
+  titleValue: string
 }
 
-
 const Header = () => {
+  const [titleValue, setTitleValue] = useState<string>('');
   const dispatch = useDispatch();
   const onAddDialogOpen = () => {
-    dispatch(controlPopupVisibility('add', true))
+    dispatch(controlPopupVisibility('add', true));
   };
 
   const visible = useSelector(({popupsReducer: {filmOverview: visibility}}: IFilmPopupVisibility) => visibility);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [movie, setMovie] = useState<IMovie | null>({
-    name: "Movie from react",
-    desc: "Desc from react",
-    year: 1996
-  });
+  const title: ITitle = useParams();
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if(title) {
+      dispatch(searchMovie(title.titleValue))
     }
-  }, []);
+  }, [title])
 
-  const searchMovie = () => {
-    console.log('will be implemented soon')
+  useEffect(() => {
+    if (titleValue !== '') {
+      dispatch(getMoviesDataStart())
+    }
+  }, [titleValue])
+
+  const findMovie = () => {
+    dispatch(searchMovie(titleValue));
   }
 
   return (
@@ -73,13 +74,15 @@ const Header = () => {
                   <ContainerRow>
                     <InputSearchMovie
                         placeholder="What do you want to watch?"
-                        ref={inputRef}
+                        value={titleValue}
+                        onChange={e => setTitleValue(e.target.value)}
                         type="text"
                     />
-                    <BtnSearchMovie
-                        onClick={searchMovie}
-                    >Search
-                    </BtnSearchMovie>
+                    <Link to={`/search/${titleValue}`}>
+                      <BtnSearchMovie onClick={findMovie} disabled={titleValue ? false : true}>
+                        Search
+                      </BtnSearchMovie>
+                    </Link>
                   </ContainerRow>
                 </ContainerColumn>
               </Container>
