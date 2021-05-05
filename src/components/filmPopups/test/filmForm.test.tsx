@@ -17,19 +17,27 @@ describe('It should render FilmForm component', () => {
   }
   const initialState = {};
   const typeAdd = 'add';
-  const popupVisibility = {
-    popupsReducer: {
+
+  const popupsReducer = {
       add: true
     }
-  }
 
-  const singleMovieReducerMock = {
-    singleMovieReducer: {
+  const singleMovieReducer = {
       movie: {}
     }
-  }
-  const store = mockStore({...initialState, singleMovieReducerMock, popupVisibility});
 
+  const alertsReducer = {
+    alertsVisible: false
+  }
+  
+  const store = mockStore({
+      popupsReducer,
+      singleMovieReducer,
+      alertsReducer
+    })
+  
+
+console.log('------store', store.getState())
   const FilmAddPopupComponent = (type: any) => {
     return <>{
       <Provider store={store}>

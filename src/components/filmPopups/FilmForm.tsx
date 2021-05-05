@@ -7,7 +7,7 @@ import SelectC from "../ui/Select/Select";
 import {IType} from "./interfaces";
 import {useDispatch, useSelector} from "react-redux";
 import {controlPopupVisibility} from "./storePopups/actions";
-import {IFilmPopupVisibility} from "../../store/interfaces";
+import {IFilmPopupVisibility, IState} from "../../store/interfaces";
 import {getMoviesDataStart} from "../films/components/filmsList/store/actions";
 import Portal from "../alerts/Portal";
 import Alert from "../alerts/Alert";
@@ -59,10 +59,9 @@ const FilmPopup = ({type}: IType) => {
 
   const [newMovieData, setNewMovieData] = useState<IMovieData>(initialEmptyMovieData);
 
-  // having troubles typing props here
-  // @ts-ignore
-  const visible = useSelector(({popupsReducer: {[type]: visibility}}: IFilmPopupVisibility) => visibility);
-  const editPopupVisible = useSelector(({popupsReducer: {['edit']: visibility}}: IFilmPopupVisibility) => visibility)
+
+  const visible = useSelector(({popupsReducer: {[type as keyof IState]: visibility}}: IFilmPopupVisibility) => visibility);
+  const editPopupVisible = useSelector(({popupsReducer: {edit: visibility}}: IFilmPopupVisibility) => visibility)
 
   const movieData = useSelector((state: RootState) => state.singleMovieReducer.movie);
 
